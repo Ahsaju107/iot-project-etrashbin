@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140" width="200" height="140" role="img" aria-label="Ikon ESP32-CAM">
+  <title>ESP32-CAM</title>
+  <defs>
+    <style>
+      .stroke { stroke:#32ccc4; stroke-width:3; stroke-linejoin:round; stroke-linecap:round; fill:none }
+      .fill  { fill:#32ccc4; stroke:none }
+      .soft  { fill: rgba(50,204,196,0.08); stroke:none }
+      .text  { fill:#32ccc4; font-family: Inter, Roboto, sans-serif; font-size:10px; font-weight:600 }
+    </style>
+  </defs>
+
+  <!-- PCB background -->
+  <rect x="6" y="16" rx="8" ry="8" width="188" height="108" class="stroke" />
+  <rect x="10" y="20" rx="6" ry="6" width="180" height="100" class="soft" />
+
+  <!-- Camera module (lens + housing) -->
+  <rect x="18" y="28" width="56" height="46" rx="4" ry="4" class="stroke" />
+  <rect x="24" y="34" width="44" height="34" rx="3" ry="3" class="fill" />
+  <circle cx="46" cy="51" r="11" fill="#ffffff" />
+  <circle cx="46" cy="51" r="7" class="stroke" />
+  <circle cx="46" cy="51" r="3" class="fill" />
+
+  <!-- Flash / LED -->
+  <rect x="80" y="34" width="10" height="8" rx="1" ry="1" fill="#ffea8a" stroke="#c9a84a" stroke-width="1"/>
+
+  <!-- Antenna area (right) -->
+  <rect x="152" y="32" width="32" height="20" rx="3" ry="3" class="stroke" />
+  <path d="M152 44c6 0 10-6 20-6" class="stroke" />
+
+  <!-- ESP32 module outline (center-right) -->
+  <rect x="82" y="56" width="102" height="46" rx="4" ry="4" class="stroke" />
+  <rect x="86" y="60" width="94" height="38" rx="3" ry="3" class="soft" />
+
+  <!-- Pin header (bottom of module) -->
+  <g transform="translate(88,100)">
+    <rect x="0" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="6" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="12" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="18" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="24" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="30" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="36" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="42" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="48" y="0" width="2.8" height="8" class="fill"/>
+    <rect x="54" y="0" width="2.8" height="8" class="fill"/>
+  </g>
+
+  <!-- Small components: microphone, antenna hole, regulator -->
+  <circle cx="115" cy="72" r="3" class="fill" />
+  <rect x="126" y="68" width="10" height="6" rx="1" ry="1" class="stroke" />
+  <rect x="140" y="69" width="6" height="8" rx="1" ry="1" class="fill" />
+
+  <!-- Decorative PCB traces -->
+  <path d="M26 80c18 0 36-6 54-6" stroke="#32ccc4" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M102 86c12 0 24 6 36 6" stroke="#32ccc4" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Label -->
+  <text x="102" y="48" class="text">ESP32-CAM</text>
+
+  <!-- tiny mounting holes -->
+  <circle cx="18" cy="108" r="2.5" class="stroke" />
+  <circle cx="182" cy="108" r="2.5" class="stroke" />
+
+</svg>
