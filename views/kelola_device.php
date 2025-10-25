@@ -1,3 +1,13 @@
+<?php
+   include '../koneksi.php';
+   if(isset($_GET['ubah'])){
+      $device_id = $_GET['ubah'];
+      $query = "SELECT * FROM tb_device WHERE device_id = '$device_id'";
+      $sql = mysqli_query($conn,$query);
+      $result = mysqli_fetch_assoc($sql);
+      $device_name = $result['device_name'];
+   }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +58,7 @@
          </li>
          <!-- Settings -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="#" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="./pengaturan.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <i class="fa-solid fa-gear"></i>
                <span class="ms-3">Pengaturan</span>
             </a>
@@ -76,7 +86,46 @@
 <!-- KONTEN UTAMA -->
 <div class="p-4 sm:ml-64">
    <div class="mt-14 sm:mt-0 rounded-lg">
-        
+      <?php 
+         if(isset($_GET['ubah'])){
+      ?>
+        <section class="w-full flex justify-center">
+            <div class="w-[400px] p-4 bg-slate-800 shadow drop-shadow-xl">
+                <h1 class="text-white font-bold text-3xl text-center mb-8">Update <span class="text-emerald-500">Device</span></h1>
+                <form action="../proses.php" method="POST" class="w-full">
+                    <input type="hidden" value="<?php echo $device_id;?>" name="device_id">
+                    <div class="flex flex-wrap mb-12">
+                        <label for="edit_device_name" class="text-emerald-400">Nama Device:</label>
+                        <input type="text" name="edit_device_name" id="edit_device_name" value="<?php echo $device_name;?>" class="w-full px-4 rounded-full bg-slate-700/50 h-8 text-white border border-emerald-500/50 shadow-sm focus:shadow-emerald-500">
+                    </div>
+                    <div class="flex gap-2 justify-end">
+                        <button type="submit" name="aksi" value="edit_device" class="bg-emerald-500 h-9 w-24 rounded flex gap-1 items-center justify-center text-white font-semibold border border-emerald-500 hover:text-emerald-400 hover:bg-transparent hover:shadow-sm hover:shadow-emerald-500"><i class="fa-solid fa-floppy-disk"></i>Update</button>
+                        <a href="./device_list.php" class="bg-red-500 w-24 h-9 flex items-center justify-center text-white font-semibold gap-1 rounded hover:bg-transparent border border-red-500 hover:text-red-500 hover:shadow-sm hover:shadow-red-500"><i class="fa-solid fa-reply"></i>Kembali</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+      <?php
+         } else {
+      ?>
+         <section class="w-full flex justify-center">
+            <div class="w-[400px] p-4 bg-slate-800 shadow drop-shadow-xl">
+                <h1 class="text-white font-bold text-3xl text-center mb-8">Tambah <span class="text-emerald-500">Device</span></h1>
+                <form action="../proses.php" method="POST" class="w-full">
+                    <div class="flex flex-wrap mb-12">
+                        <label for="add_device_name" class="text-emerald-400">Nama Device:</label>
+                        <input type="text" name="add_device_name" id="add_device_name" class="w-full px-4 rounded-full bg-slate-700/50 h-8 text-white border border-emerald-500/50 shadow-sm focus:shadow-emerald-500">
+                    </div>
+                    <div class="flex gap-2 justify-end">
+                        <button type="submit" name="aksi" value="add_device" class="bg-emerald-500 h-9 w-24 rounded flex gap-1 items-center justify-center text-white font-semibold border border-emerald-500 hover:text-emerald-400 hover:bg-transparent hover:shadow-sm hover:shadow-emerald-500"><i class="fa-solid fa-floppy-disk"></i>Tambah</button>
+                        <a href="./device_list.php" class="bg-red-500 w-24 h-9 flex items-center justify-center text-white font-semibold gap-1 rounded hover:bg-transparent border border-red-500 hover:text-red-500 hover:shadow-sm hover:shadow-red-500"><i class="fa-solid fa-reply"></i>Kembali</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+      <?php
+         }
+      ?>
    </div>
 </div>
 

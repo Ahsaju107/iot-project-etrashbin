@@ -1,3 +1,9 @@
+<?php
+    include '../proses.php';
+    $query = "SELECT * FROM tb_device";
+    $sql = mysqli_query($conn,$query);
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +12,7 @@
     <title>Dashboard - Device List</title>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     
 </head>
 <body class="bg-slate-900">
@@ -34,7 +40,7 @@
          </li>
          <!-- Device List -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="./device_list.html" class="nav-link flex items-center p-2 rounded-lg text-emerald-400 bg-emerald-500/10 group active">
+            <a href="" class="nav-link flex items-center p-2 rounded-lg text-emerald-400 bg-emerald-500/10 group active">
                <i class="fa-solid fa-display"></i>
                <span class="ms-3">Device List</span>
             </a>
@@ -76,21 +82,72 @@
 <!-- KONTEN UTAMA -->
 <div class="p-4 sm:ml-64">
    <div class="mt-14 sm:mt-0 rounded-lg">
-        <section class="w-full flex justify-center">
-            <div class="w-[400px] p-4 bg-slate-800 shadow drop-shadow-xl">
-                <h1 class="text-white font-bold text-3xl text-center mb-8">Tambah <span class="text-emerald-500">Device</span></h1>
-                <form action="" class="w-full">
-                    <div class="flex flex-wrap mb-12">
-                        <label for="" class="text-emerald-400">Nama Device:</label>
-                        <input type="text" class="w-full px-4 rounded-full bg-slate-700/50 h-8 text-white border border-emerald-500/50 shadow-sm focus:shadow-emerald-500">
-                    </div>
-                    <div class="flex gap-2 justify-end">
-                        <button class="bg-emerald-500 h-9 w-24 rounded flex gap-1 items-center justify-center text-white font-semibold border border-emerald-500 hover:text-emerald-400 hover:bg-transparent hover:shadow-sm hover:shadow-emerald-500"><i class="fa-solid fa-floppy-disk"></i>Tambah</button>
-                        <a href="./device_list.html" class="bg-red-500 w-24 h-9 flex items-center justify-center text-white font-semibold gap-1 rounded hover:bg-transparent border border-red-500 hover:text-red-500 hover:shadow-sm hover:shadow-red-500"><i class="fa-solid fa-reply"></i>Kembali</a>
-                    </div>
-                </form>
+        <!-- KONTEN 1 START -->
+        <div class="mb-7 mt-3">
+            <div class="flex items-center gap-3 mb-2">
+                <i class="fa-classic fa-display text-emerald-400 text-3xl"></i>
+                <h1 class="text-4xl text-slate-200 font-bold">Device List</h1>
             </div>
-        </section>
+            <span class="w-full h-0.5 bg-gradient-to-r from-emerald-500 to-transparent rounded-full block"></span>
+        </div>
+        
+        <div class="flex flex-wrap justify-between gap-3 mb-7">
+            <a href="./kelola_device.php" class="text-white bg-emerald-500 hover:bg-emerald-600 font-semibold rounded-lg p-3 w-full md:w-44 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-emerald-500/20">
+                <i class="fa-solid fa-plus"></i>
+                <span>Tambah Device</span>
+            </a>
+            <!-- Search Input -->
+            <div class="w-full md:w-72 py-2 flex items-center bg-slate-800 border border-emerald-500/20 rounded-lg shadow-lg overflow-hidden px-3 gap-2 hover:border-emerald-500/40 transition-all duration-200">
+                <i class="fa-solid fa-search text-emerald-400 text-xl"></i>
+                <input type="text" placeholder="Cari device..." class="w-full h-full bg-transparent text-slate-200 placeholder:text-slate-500 outline-none">
+            </div>
+        </div>
+        <!-- KONTEN 1 END -->
+
+        <!-- KONTEN 2 START -->
+        <div class="grid-list grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <?php
+                while($result = mysqli_fetch_assoc($sql)){
+            ?>
+            <!-- ITEM 2 (Offline Example) -->
+            <div class="grid-item bg-slate-800 border border-emerald-500/20 rounded-xl p-4 hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 transition-all duration-200 shadow-lg hover:border-emerald-500/40 group">
+                <a href="../index.html" class="block text-center">
+                    <div class="w-16 h-16 mx-auto mb-3 bg-emerald-500/20 rounded-full flex items-center justify-center group-hover:bg-emerald-500/30 transition-all duration-200">
+                        <img src="../images/trashbin-icon.png" alt="trashbin-icon" class="w-6">
+                    </div>
+                    <h1 class="text-center font-bold text-xl mb-2 text-slate-200"><?php echo $result['device_name'] ?></h1>
+                    <?php if($result['is_active'] == 1){ ?>
+                    <p class="text-center bg-emerald-500/20 text-emerald-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-emerald-500/30">
+                        <i class="fa-solid fa-circle text-xs animate-pulse"></i> Online
+                    </p>
+                    <?php 
+                    } else { 
+                    ?>
+                    <p class="text-center bg-slate-700/50 text-slate-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-slate-600">
+                        <i class="fa-solid fa-circle text-xs"></i> Offline
+                    </p>
+                    <?php
+                     } 
+                    ?>
+                </a>
+
+                <div class="flex justify-center gap-4 pt-3 border-t border-slate-700">
+                    <a href="./kelola_device.php?ubah=<?php echo $result['device_id']; ?>" class="text-slate-400 hover:text-emerald-400 transition-colors duration-200">
+                        <i class="fa-solid fa-edit text-lg"></i>
+                    </a>
+                    <a href="../proses.php?hapus_device=<?php echo $result['device_id']; ?>" class="text-slate-400 hover:text-red-400 transition-colors duration-200">
+                        <i class="fa-solid fa-trash text-lg"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ITEM END -->
+             <?php
+              } 
+             ?>
+            
+            
+        <!-- KONTEN 2 END -->
+        
    </div>
 </div>
 

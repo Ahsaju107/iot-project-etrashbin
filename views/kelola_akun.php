@@ -1,3 +1,10 @@
+<?php 
+   include '../koneksi.php';
+
+   $query = "SELECT * FROM tb_user";
+   $sql = mysqli_query($conn,$query);
+   $nomor = 0;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +41,7 @@
          </li>
          <!-- Device List -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="./device_list.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-emerald-500/10 group active">
+            <a href="./device_list.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-emerald-500/10 group active">
                <i class="fa-solid fa-display"></i>
                <span class="ms-3">Device List</span>
             </a>
@@ -85,7 +92,7 @@
 
         <!-- KONTEN 2 -->
         <div class="flex flex-wrap justify-between gap-3 mb-6">
-            <a href="./kelola_akun_action.html" class="flex items-center text-white bg-emerald-500 w-full md:w-48 h-12 justify-center rounded-lg p-2 font-semibold shadow drop-shadow-md hover:shadow-emerald-600 hover:bg-transparent border-0 border-emerald-500 hover:border hover:text-emerald-400"><i class="fa-solid fa-plus"></i>Tambah Data</a>
+            <a href="./kelola_akun_action.php" class="flex items-center text-white bg-emerald-500 w-full md:w-48 h-12 justify-center rounded-lg p-2 font-semibold shadow drop-shadow-md hover:shadow-emerald-600 hover:bg-transparent border-0 border-emerald-500 hover:border hover:text-emerald-400"><i class="fa-solid fa-plus"></i>Tambah Data</a>
             <div class="flex w-full md:w-72 items-center bg-slate-700/50 rounded-lg px-4 border border-emerald-500/20 hover:border-emerald-500/50 shadow-sm hover:shadow-emerald-500/50">
                 <i class="fa-solid fa-search text-lg text-emerald-500"></i>
                 <input type="text" class="w-full h-full focus:outline-none bg-transparent py-3 px-4 text-white">
@@ -103,14 +110,21 @@
                     </tr>
                 </thead>
                 <tbody class="text-center">
-                    <tr>
-                        <td class="p-2">1</td>
-                        <td class="p-2">Wahyudi</td>
+                  <?php
+                     while($result = mysqli_fetch_assoc($sql)){
+                  ?>
+                    <tr class="hover:bg-slate-700/50">
+                        <td class="p-2"><?php echo ++$nomor; ?></td>
+                        <td class="p-2"><?php echo $result['username']; ?></td>
                         <td class="p-2 flex justify-center gap-2">
-                            <a href="./kelola_akun_action.html" class="bg-emerald-400 rounded-lg flex w-10 h-10 justify-center items-center hover:bg-transparent border hover:border border-emerald-500/50 shadow hover:shadow-emerald-500 group"><i class="fa-solid fa-edit text-slate-900 text-xl group-hover:text-emerald-500"></i></a>
-                            <a href="#" class="bg-red-400 rounded-lg flex w-10 h-10 justify-center items-center hover:bg-transparent border hover:border border-red-400 shadow hover:shadow-red-500 group"><i class="fa-solid fa-trash text-slate-900 text-xl group-hover:text-red-500"></i></a>
+                            <a href="./kelola_akun_action.php?ubah=<?php echo $result['id_user']; ?>" class="bg-emerald-400 rounded-lg flex w-10 h-10 justify-center items-center hover:bg-transparent border hover:border border-emerald-500/50 shadow hover:shadow-emerald-500 group"><i class="fa-solid fa-edit text-slate-900 text-xl group-hover:text-emerald-500"></i></a>
+                            <a href="../proses.php?hapus_akun=<?php echo $result['id_user']; ?>" class="bg-red-400 rounded-lg flex w-10 h-10 justify-center items-center hover:bg-transparent border hover:border border-red-400 shadow hover:shadow-red-500 group"><i class="fa-solid fa-trash text-slate-900 text-xl group-hover:text-red-500"></i></a>
                         </td>
                     </tr>
+                    <?php
+                     }
+                    ?>
+                    
                 </tbody>
             </table>
          </div>
