@@ -1,3 +1,11 @@
+<?php 
+    session_start();
+    include '../koneksi.php';
+
+    $query = "SELECT * FROM tb_device WHERE device_id = '{$_SESSION['device_id']}'";
+    $sql = mysqli_query($conn,$query);
+    $result = mysqli_fetch_assoc($sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +31,7 @@
    <ul class="font-medium space-y-2">
          <!-- Dashboard -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="../index.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group active">
+            <a href="../index.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group active">
                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                   <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
@@ -127,7 +135,7 @@
                     <i class="fa-solid fa-circle-nodes text-emerald-400 text-2xl"></i>
                     <h1 class="font-bold text-4xl text-slate-200 drop-shadow-lg">Status Perangkat</h1>
                 </div>
-                <h2 class="text-lg font-medium text-emerald-400 ml-10">XI TKJ 3</h2>
+                <h2 class="text-lg font-medium text-emerald-400 ml-10"><?php echo $result['device_name']; ?></h2>
             </div>
             <span class="w-full h-0.5 bg-gradient-to-r from-emerald-500 to-transparent rounded-full"></span>
           </div>

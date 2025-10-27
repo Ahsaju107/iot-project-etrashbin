@@ -11,18 +11,18 @@
     <main class="flex items-center justify-center px-3 w-full min-h-screen">
         <section class="text-center w-[400px] h-[600px] p-6 bg-slate-800 rounded-lg shadow-md drop-shadow-[0_3px_3px_rgb(16,185,128,0.3)] hover:drop-shadow-[0_3px_3px_rgb(16,185,128)] border border-emerald-500/50">
             <img src="../images/logo.png" alt="logo-iot" class="w-32 mx-auto mb-24 mt-5">
-            <form action="" class="w-full">
+            <form action="../proses.php" method="POST" class="w-full">
                 <!-- INPUT USERNAME -->
                 <div class="flex flex-wrap mb-5">
-                    <label for="" class="text-emerald-500 font-medium text-lg mb-1 ml-1">Username:</label>
-                    <input type="text" class="w-full px-4 rounded-full h-10 bg-slate-700/50 focus:outline-none border border-emerald-500/50 focus:ring-2 focus:ring-emerald-500 shadow drop-shadow-lg">
+                    <label for="login_username" class="text-emerald-500 font-medium text-lg mb-1 ml-1">Username:</label>
+                    <input required type="text" name="login_username" id="login_username" class="w-full px-4 rounded-full h-10 bg-slate-700/50 focus:outline-none border border-emerald-500/50 focus:ring-2 focus:ring-emerald-500 shadow drop-shadow-lg">
                 </div>
                 <!-- INPUT PASSWORD -->
                 <div class="flex flex-wrap mb-8">
-                    <label for="" class="text-emerald-500 font-medium text-lg mb-1 ml-1">Password:</label>
-                    <input type="password" class="w-full px-4 rounded-full h-10 bg-slate-700/50 focus:outline-none border border-emerald-500/50 focus:ring-2 focus:ring-emerald-500 shadow drop-shadow-lg">
+                    <label for="login_password" class="text-emerald-500 font-medium text-lg mb-1 ml-1">Password:</label>
+                    <input required type="password" name="login_password" id="login_password" class="w-full px-4 rounded-full h-10 bg-slate-700/50 focus:outline-none border border-emerald-500/50 focus:ring-2 focus:ring-emerald-500 shadow drop-shadow-lg">
                 </div>
-                <button type="submit" class="bg-emerald-500 rounded-full w-full h-12 text-slate-900 hover:text-emerald-400 hover:bg-transparent border-0  hover:border border-emerald-500/50 hover:shadow hover:drop-shadow-[0_3px_3px_rgb(16,185,128,0.5)] transition-all duration-100 font-semibold text-lg">Masuk</button>
+                <button type="submit" name="aksi" value="login" class="bg-emerald-500 rounded-full w-full h-12 text-slate-900 hover:text-emerald-400 hover:bg-transparent border-0  hover:border border-emerald-500/50 hover:shadow hover:drop-shadow-[0_3px_3px_rgb(16,185,128,0.5)] transition-all duration-100 font-semibold text-lg">Masuk</button>
             </form>
             
         </section>

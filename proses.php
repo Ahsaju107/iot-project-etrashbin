@@ -2,6 +2,39 @@
     include 'koneksi.php';
 
     if(isset($_POST['aksi'])){
+    // FUNGSI LOGIN
+    if($_POST['aksi'] == 'login'){
+        $username = $_POST['login_username'];
+        $password = $_POST['login_password'];
+
+        $query = "SELECT * FROM tb_user WHERE username='$username' AND password='$password'";
+        $sql = mysqli_query($conn,$query);
+        $result = mysqli_fetch_assoc($sql);
+        if($sql){
+            if($username == '' || $password == ''){
+                header('location: ./views/login.php');
+            } else {
+                if($username == $result['username'] && $password == $result['password']){
+                    $_SESSION['id_user'] = $result['id_user'];
+                    $_SESSION['username'] = $result['username'];
+                    header('location: ./index.php');
+                } else {
+                    header('location: ./views/login.php');
+                }
+            }
+        } else {
+            echo "error: ".mysqli_error($conn);
+        }
+    }
+
+    // FUNGSI UNTUK MENUJU HALAMAN DASHBOARD DEVICE
+    if($_POST['aksi'] == 'device'){
+        $device_id = $_POST['device_id'];
+        session_start();
+        $_SESSION['device_id'] = $device_id;
+        header('location: ./index.php');
+    }
+
     // FUNGSI UNTUK MENAMBAHKAN USER
     if($_POST['aksi'] == 'add_user'){
         $username = $_POST['username'];

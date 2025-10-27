@@ -1,4 +1,5 @@
 <?php
+   session_start();
     include '../proses.php';
     $query = "SELECT * FROM tb_device";
     $sql = mysqli_query($conn,$query);
@@ -30,7 +31,7 @@
    <ul class="font-medium space-y-2">
          <!-- Dashboard -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="../index.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="../index.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                   <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
@@ -47,7 +48,7 @@
          </li>
          <!-- Device Status -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="./status_perangkat.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="./status_perangkat.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <i class="fa-solid fa-circle-nodes"></i>
                <span class="ms-3">Status Perangkat</span>
             </a>
@@ -111,25 +112,28 @@
             ?>
             <!-- ITEM 2 (Offline Example) -->
             <div class="grid-item bg-slate-800 border border-emerald-500/20 rounded-xl p-4 hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 transition-all duration-200 shadow-lg hover:border-emerald-500/40 group">
-                <a href="../index.html" class="block text-center">
-                    <div class="w-16 h-16 mx-auto mb-3 bg-emerald-500/20 rounded-full flex items-center justify-center group-hover:bg-emerald-500/30 transition-all duration-200">
-                        <img src="../images/trashbin-icon.png" alt="trashbin-icon" class="w-6">
-                    </div>
-                    <h1 class="text-center font-bold text-xl mb-2 text-slate-200"><?php echo $result['device_name'] ?></h1>
-                    <?php if($result['is_active'] == 1){ ?>
-                    <p class="text-center bg-emerald-500/20 text-emerald-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-emerald-500/30">
-                        <i class="fa-solid fa-circle text-xs animate-pulse"></i> Online
-                    </p>
-                    <?php 
-                    } else { 
-                    ?>
-                    <p class="text-center bg-slate-700/50 text-slate-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-slate-600">
-                        <i class="fa-solid fa-circle text-xs"></i> Offline
-                    </p>
-                    <?php
-                     } 
-                    ?>
-                </a>
+               <form action="../proses.php" method="POST" class="flex justify-center">
+                  <input type="hidden" value="<?php echo $result['device_id']; ?>" name="device_id">
+                  <button type="submit" name="aksi" value="device" class="block w-full">
+                       <div class="w-16 h-16 mx-auto mb-3 bg-emerald-500/20 rounded-full flex items-center justify-center group-hover:bg-emerald-500/30 transition-all duration-200">
+                           <img src="../images/trashbin-icon.png" alt="trashbin-icon" class="w-6">
+                       </div>
+                       <h1 class="text-center font-bold text-xl mb-2 text-slate-200"><?php echo $result['device_name'] ?></h1>
+                       <?php if($result['is_active'] == 1){ ?>
+                       <p class="text-center bg-emerald-500/20 text-emerald-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-emerald-500/30">
+                           <i class="fa-solid fa-circle text-xs animate-pulse"></i> Online
+                       </p>
+                       <?php 
+                       } else { 
+                       ?>
+                       <p class="text-center bg-slate-700/50 text-slate-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-slate-600">
+                           <i class="fa-solid fa-circle text-xs"></i> Offline
+                       </p>
+                       <?php
+                        } 
+                       ?>
+                   </button>
+               </form> 
 
                 <div class="flex justify-center gap-4 pt-3 border-t border-slate-700">
                     <a href="./kelola_device.php?ubah=<?php echo $result['device_id']; ?>" class="text-slate-400 hover:text-emerald-400 transition-colors duration-200">

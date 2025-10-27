@@ -34,7 +34,7 @@
    <ul class="font-medium space-y-2">
          <!-- Dashboard -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="../index.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="../index.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                   <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
@@ -51,7 +51,7 @@
          </li>
          <!-- Device Status -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="./status_perangkat.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="./status_perangkat.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <i class="fa-solid fa-circle-nodes"></i>
                <span class="ms-3">Status Perangkat</span>
             </a>
@@ -96,7 +96,7 @@
                     <input type="hidden" value="<?php echo $device_id;?>" name="device_id">
                     <div class="flex flex-wrap mb-12">
                         <label for="edit_device_name" class="text-emerald-400">Nama Device:</label>
-                        <input type="text" name="edit_device_name" id="edit_device_name" value="<?php echo $device_name;?>" class="w-full px-4 rounded-full bg-slate-700/50 h-8 text-white border border-emerald-500/50 shadow-sm focus:shadow-emerald-500">
+                        <input type="text" name="edit_device_name" id="edit_device_name" value="<?php echo $device_name;?>" class="w-full px-4 focus:outline-none rounded-full bg-slate-700/50 h-8 text-white border border-emerald-500/50 shadow-sm focus:shadow-emerald-500">
                     </div>
                     <div class="flex gap-2 justify-end">
                         <button type="submit" name="aksi" value="edit_device" class="bg-emerald-500 h-9 w-24 rounded flex gap-1 items-center justify-center text-white font-semibold border border-emerald-500 hover:text-emerald-400 hover:bg-transparent hover:shadow-sm hover:shadow-emerald-500"><i class="fa-solid fa-floppy-disk"></i>Update</button>
@@ -114,7 +114,7 @@
                 <form action="../proses.php" method="POST" class="w-full">
                     <div class="flex flex-wrap mb-12">
                         <label for="add_device_name" class="text-emerald-400">Nama Device:</label>
-                        <input type="text" name="add_device_name" id="add_device_name" class="w-full px-4 rounded-full bg-slate-700/50 h-8 text-white border border-emerald-500/50 shadow-sm focus:shadow-emerald-500">
+                        <input type="text" name="add_device_name" id="add_device_name" class="w-full px-4 rounded-full focus:outline-none bg-slate-700/50 h-8 text-white border border-emerald-500/50 shadow-sm focus:shadow-emerald-500">
                     </div>
                     <div class="flex gap-2 justify-end">
                         <button type="submit" name="aksi" value="add_device" class="bg-emerald-500 h-9 w-24 rounded flex gap-1 items-center justify-center text-white font-semibold border border-emerald-500 hover:text-emerald-400 hover:bg-transparent hover:shadow-sm hover:shadow-emerald-500"><i class="fa-solid fa-floppy-disk"></i>Tambah</button>

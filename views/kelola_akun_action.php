@@ -37,7 +37,7 @@
    <ul class="font-medium space-y-2">
          <!-- Dashboard -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="../index.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="../index.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                   <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
@@ -54,7 +54,7 @@
          </li>
          <!-- Device Status -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="./status_perangkat.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="./status_perangkat.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <i class="fa-solid fa-circle-nodes"></i>
                <span class="ms-3">Status Perangkat</span>
             </a>
@@ -100,11 +100,11 @@
                      <input type="hidden" value="<?php echo $id_user;?>" name="id_user">
                     <div class="flex flex-wrap gap-1 mb-5">
                         <label for="edit_username" class="text-emerald-400">Nama:</label>
-                        <input type="text" name="edit_username" id="edit_username" value="<?php echo $username; ?>" required class="w-full px-3 rounded-full h-8 bg-slate-700/50 border border-emerald-500/25 shadow-sm focus:shadow-emerald-500">
+                        <input type="text" name="edit_username" id="edit_username" value="<?php echo $username; ?>" required class="w-full px-3 rounded-full h-8 focus:outline-none bg-slate-700/50 border border-emerald-500/25 shadow-sm focus:shadow-emerald-500">
                     </div>
                     <div class="flex flex-wrap gap-1 mb-10">
                         <label for="edit_password" class="text-emerald-400">Password:</label>
-                        <input type="password" name="edit_password" id="edit_password" value="<?php echo $password; ?>" required class="w-full px-3 rounded-full h-8 bg-slate-700/50 border border-emerald-500/25 shadow-sm focus:shadow-emerald-500">
+                        <input type="password" name="edit_password" id="edit_password" value="<?php echo $password; ?>" required class="w-full px-3 rounded-full h-8 focus:outline-none bg-slate-700/50 border border-emerald-500/25 shadow-sm focus:shadow-emerald-500">
                     </div>
                     <div class="flex gap-2">
                         <button type="submit" name="aksi" value="edit_user" class="bg-emerald-500 w-1/2 h-9 rounded flex gap-1 items-center justify-center text-white font-semibold border border-emerald-500 hover:text-emerald-400 hover:bg-transparent hover:shadow-sm hover:shadow-emerald-500"><i class="fa-solid fa-floppy-disk"></i>Update</button>
@@ -124,11 +124,11 @@
                 <form action="../proses.php" method="POST" class="w-full">
                     <div class="flex flex-wrap gap-1 mb-5">
                         <label for="username" class="text-emerald-400">Nama:</label>
-                        <input type="text" name="username" id="username" required class="w-full px-3 rounded-full h-8 bg-slate-700/50 border border-emerald-500/25 shadow-sm focus:shadow-emerald-500">
+                        <input type="text" name="username" id="username" required class="w-full px-3 rounded-full h-8 focus:outline-none bg-slate-700/50 border border-emerald-500/25 shadow-sm focus:shadow-emerald-500">
                     </div>
                     <div class="flex flex-wrap gap-1 mb-10">
                         <label for="password" class="text-emerald-400">Password:</label>
-                        <input type="password" name="password" id="password" required class="w-full px-3 rounded-full h-8 bg-slate-700/50 border border-emerald-500/25 shadow-sm focus:shadow-emerald-500">
+                        <input type="password" name="password" id="password" required class="w-full px-3 rounded-full h-8 focus:outline-none bg-slate-700/50 border border-emerald-500/25 shadow-sm focus:shadow-emerald-500">
                     </div>
                     <div class="flex gap-2">
                         <button type="submit" name="aksi" value="add_user" class="bg-emerald-500 w-1/2 h-9 rounded flex gap-1 items-center justify-center text-white font-semibold border border-emerald-500 hover:text-emerald-400 hover:bg-transparent hover:shadow-sm hover:shadow-emerald-500"><i class="fa-solid fa-floppy-disk"></i>Tambah</button>

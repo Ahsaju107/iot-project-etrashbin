@@ -1,9 +1,18 @@
+<?php
+   session_start();
+   include './koneksi.php';
+   $query = "SELECT * FROM tb_device WHERE device_id ='{$_SESSION['device_id']}'";
+   $sql = mysqli_query($conn,$query);
+   $result = mysqli_fetch_assoc($sql);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Dashboard <?php echo $_SESSION['device_id'];?></title>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
@@ -24,7 +33,7 @@
    <ul class="font-medium space-y-2">
          <!-- Dashboard -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="#" class="nav-link flex items-center p-2 rounded-lg text-emerald-400 bg-emerald-500/10 group active">
+            <a href="./index.php" class="nav-link flex items-center p-2 rounded-lg text-emerald-400 bg-emerald-500/10 group active">
                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                   <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
@@ -41,7 +50,7 @@
          </li>
          <!-- Device Status -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="./views/status_perangkat.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="./views/status_perangkat.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <i class="fa-solid fa-circle-nodes"></i>
                <span class="ms-3">Status Perangkat</span>
             </a>
@@ -132,7 +141,7 @@
                </svg>
                <h1 class="text-4xl font-bold text-slate-200">Dashboard</h1>
             </div>
-            <p class="mb-2 text-lg text-emerald-400 font-medium">XI TKJ 3</p>
+            <p class="mb-2 text-lg text-emerald-400 font-medium"><?php echo $result['device_name']; ?></p>
             <div class="w-full h-0.5 bg-gradient-to-r from-emerald-500 to-transparent rounded-full"></div>
          </div>
 
