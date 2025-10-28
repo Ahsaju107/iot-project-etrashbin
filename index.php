@@ -20,7 +20,17 @@ if (!empty($_SESSION['device_id'])) {
     $did = mysqli_real_escape_string($conn, $_SESSION['device_id']);
     $r = mysqli_query($conn, "SELECT * FROM tb_device WHERE device_id='$did' LIMIT 1");
     if ($r && mysqli_num_rows($r) > 0) $result = mysqli_fetch_assoc($r);
-}  
+}
+
+   // Menghitung total perangkat
+   $q_total = mysqli_query($conn,"SELECT COUNT(*) AS total_perangkat FROM tb_device");
+   $q_result = mysqli_fetch_assoc($q_total);
+   $total_perangkat = $q_result['total_perangkat'];
+
+   // Menghitung total perangkat yang online
+   $q_perangkat_online = mysqli_query($conn, "SELECT COUNT(*) AS total_online FROM tb_device WHERE status = 1");
+   $result_perangkat_online = mysqli_fetch_assoc($q_perangkat_online);
+   $total_online = $result_perangkat_online['total_online'];
 
     $query = "SELECT 
         d.device_id,
@@ -140,7 +150,7 @@ if (!empty($_SESSION['device_id'])) {
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Total Perangkat</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400">4</h1>
+                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $total_perangkat; ?></h1>
                 </div>
             </div>
           
@@ -151,7 +161,7 @@ if (!empty($_SESSION['device_id'])) {
                </div>
                 <div class="text-slate-200">
                    <h2 class="text-sm md:text-base text-slate-400">Status Sistem</h2>
-                   <h1 class="text-lg font-medium text-emerald-400">1/4 Online</h1>
+                   <h1 class="text-lg font-medium text-emerald-400"><?php echo $total_online; ?>/<?php echo $total_perangkat; ?> Online</h1>
                 </div>
             </div>
             
