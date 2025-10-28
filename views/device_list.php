@@ -127,7 +127,7 @@
                            <img src="../images/trashbin-icon.png" alt="trashbin-icon" class="w-6">
                        </div>
                        <h1 class="text-center font-bold text-xl mb-2 text-slate-200"><?php echo $result['device_name'] ?></h1>
-                       <?php if($result['is_active'] == 1){ ?>
+                       <?php if($result['status'] == 1){ ?>
                        <p class="text-center bg-emerald-500/20 text-emerald-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-emerald-500/30">
                            <i class="fa-solid fa-circle text-xs animate-pulse"></i> Online
                        </p>

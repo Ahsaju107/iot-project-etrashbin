@@ -8,17 +8,15 @@ function setGaugeValue(gauge, value) {
   gauge.querySelector(".gauge__fill").style.transform = `rotate(${
     value / 2
   }turn)`;
-  gauge.querySelector(".gauge__cover").textContent = `${Math.round(
-    value * 100
-  )}%`;
+
 }
 
 async function updateGauge() {
     try {
-      const res = await fetch('data.php');
+      const res = await fetch('../data.php');
       const obj = await res.json();       // HARUS valid JSON
       if (obj.status === 'ok') {
-        setGaugeValue(gaugeElement, obj.persen / 100);
+        setGaugeValue(gaugeElement, obj.kapasitasOrganik / 100);
       } else {
         console.error('Server error:', obj.msg);
       }
@@ -28,4 +26,4 @@ async function updateGauge() {
   }
 
   updateGauge();
-setInterval(updateGauge, 3000);
+setInterval(updateGauge, 2000);

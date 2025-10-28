@@ -22,6 +22,33 @@ if (!empty($_SESSION['device_id'])) {
     if ($r && mysqli_num_rows($r) > 0) $result = mysqli_fetch_assoc($r);
 }  
 
+    $query = "SELECT 
+        d.device_id,
+        d.device_name,
+        d.status,
+        ds.wifi_signal,
+        ds.last_update,
+        ds.sensor_cam,
+        ds.sensor_ultrasonic,
+        ds.sensor_proximity,
+        ds.servo,
+        ds.lcd,
+        ds.kapasitas_organik,
+        ds.kapasitas_anorganik,
+        ds.kapasitas_logam,
+        ds.sorting_today
+        FROM tb_device d 
+        LEFT JOIN tb_device_status ds ON d.device_id = ds.device_id
+        WHERE d.device_id = '{$_SESSION['device_id']}'";
+
+    $sql = mysqli_query($conn,$query);
+    $resultData = mysqli_fetch_assoc($sql);
+
+    $rotasi_logam = ($resultData['kapasitas_logam'] / 100) * 0.5;
+    $rotasi_organik = ($resultData['kapasitas_organik'] / 100) * 0.5;
+    $rotasi_anorganik = ($resultData['kapasitas_anorganik'] / 100) * 0.5;
+
+
 ?>
 
 <!DOCTYPE html>
@@ -182,8 +209,8 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill"></div>
-                        <div class="gauge__cover text-white">50%</div>
+                        <div class="gauge__fill" style="transform: rotate(<?php echo $rotasi_logam; ?>turn);"></div>
+                        <div class="gauge__cover text-white"><?php echo $resultData['kapasitas_logam']; ?>%</div>
                      </div>
                   </div>
                </div>
@@ -200,8 +227,8 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill"></div>
-                        <div class="gauge__cover text-white">75%</div>
+                        <div class="gauge__fill" style="transform: rotate(<?php echo $rotasi_organik; ?>turn);"></div>
+                        <div class="gauge__cover text-white"><?php echo $resultData['kapasitas_organik'];?>%</div>
                      </div>
                   </div>
                </div>
@@ -218,8 +245,8 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill"></div>
-                        <div class="gauge__cover text-white">25%</div>
+                        <div class="gauge__fill" style="transform: rotate(<?php echo $rotasi_anorganik; ?>turn);"></div>
+                        <div class="gauge__cover text-white"><?php echo $resultData['kapasitas_anorganik']; ?>%</div>
                      </div>
                   </div>
                </div>
