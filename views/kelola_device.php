@@ -1,5 +1,13 @@
 <?php
+   session_start();
    include '../koneksi.php';
+
+      // CEK LOGIN
+   if(!isset($_SESSION['id_user'])){
+      header('location: ./login.php');
+      exit();
+   }
+
    if(isset($_GET['ubah'])){
       $device_id = $_GET['ubah'];
       $query = "SELECT * FROM tb_device WHERE device_id = '$device_id'";
@@ -58,7 +66,7 @@
          </li>
          <!-- Settings -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="./pengaturan.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="./pengaturan.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <i class="fa-solid fa-gear"></i>
                <span class="ms-3">Pengaturan</span>
             </a>
@@ -72,10 +80,12 @@
          </li>
          <!-- Logout -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <button type="button" class="flex w-full items-center p-2 rounded-lg text-slate-300 hover:bg-red-500/10 hover:text-red-400 group">
-               <i class="fa-solid fa-right-to-bracket"></i>
-               <span class="ms-3">Log out</span>
-            </button>
+            <form action="../proses.php" method="post">
+               <button type="submit" name="aksi" value="logout" onclick="return confirm('apakah kamu yakin ingin keluar?')" class="flex w-full items-center p-2 rounded-lg text-slate-300 hover:bg-red-500/10 hover:text-red-400 group">
+                  <i class="fa-solid fa-right-to-bracket"></i>
+                  <span class="ms-3">Log out</span>
+               </button>
+            </form>
          </li>
         
       </ul>

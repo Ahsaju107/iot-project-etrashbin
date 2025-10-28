@@ -1,9 +1,26 @@
 <?php
    session_start();
    include './koneksi.php';
-   $query = "SELECT * FROM tb_device WHERE device_id ='{$_SESSION['device_id']}'";
-   $sql = mysqli_query($conn,$query);
-   $result = mysqli_fetch_assoc($sql);
+
+   if(!isset($_SESSION['id_user'])){
+      header('location: ./views/login.php');
+      exit();
+   }
+  // Jika session device_id belum ada, ambil 1 device dari DB
+if (empty($_SESSION['device_id'])) {
+    $q = mysqli_query($conn, "SELECT device_id FROM tb_device LIMIT 1");
+    $row = ($q && mysqli_num_rows($q) > 0) ? mysqli_fetch_assoc($q) : null;
+    // kalau tidak ada device di DB, set jadi string kosong supaya aman
+    $_SESSION['device_id'] = $row['device_id'] ?? '';
+}
+
+// Ambil data device hanya jika device_id tersedia
+$result = null;
+if (!empty($_SESSION['device_id'])) {
+    $did = mysqli_real_escape_string($conn, $_SESSION['device_id']);
+    $r = mysqli_query($conn, "SELECT * FROM tb_device WHERE device_id='$did' LIMIT 1");
+    if ($r && mysqli_num_rows($r) > 0) $result = mysqli_fetch_assoc($r);
+}  
 
 ?>
 
@@ -57,7 +74,7 @@
          </li>
          <!-- Settings -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="./views/pengaturan.html" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
+            <a href="./views/pengaturan.php" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
                <i class="fa-solid fa-gear"></i>
                <span class="ms-3">Pengaturan</span>
             </a>
@@ -71,10 +88,12 @@
          </li>
          <!-- Logout -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
-            <button type="button" class="flex w-full items-center p-2 rounded-lg text-slate-300 hover:bg-red-500/10 hover:text-red-400 group">
-               <i class="fa-solid fa-right-to-bracket"></i>
-               <span class="ms-3">Log out</span>
-            </button>
+            <form action="./proses.php" method="post">
+               <button type="submit" name="aksi" value="logout" onclick="return confirm('apakah kamu yakin ingin keluar?')" class="flex w-full items-center p-2 rounded-lg text-slate-300 hover:bg-red-500/10 hover:text-red-400 group">
+                  <i class="fa-solid fa-right-to-bracket"></i>
+                  <span class="ms-3">Log out</span>
+               </button>
+            </form>
          </li>
         
       </ul>

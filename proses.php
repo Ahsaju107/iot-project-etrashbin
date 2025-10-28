@@ -15,9 +15,11 @@
                 header('location: ./views/login.php');
             } else {
                 if($username == $result['username'] && $password == $result['password']){
+                    session_start();
                     $_SESSION['id_user'] = $result['id_user'];
                     $_SESSION['username'] = $result['username'];
                     header('location: ./index.php');
+                    exit();
                 } else {
                     header('location: ./views/login.php');
                 }
@@ -26,6 +28,15 @@
             echo "error: ".mysqli_error($conn);
         }
     }
+
+    // FUNGSI UNTUK LOGOUT
+    if($_POST['aksi'] == 'logout'){
+        session_start();
+        unset($_SESSION['id_user']);
+        session_destroy();
+        header('location: /trashbin/views/login.php');
+    }
+
 
     // FUNGSI UNTUK MENUJU HALAMAN DASHBOARD DEVICE
     if($_POST['aksi'] == 'device'){
