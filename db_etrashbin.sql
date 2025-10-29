@@ -1,0 +1,233 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Oct 29, 2025 at 12:48 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `db_etrashbin`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_device`
+--
+
+CREATE TABLE `tb_device` (
+  `device_id` int(11) NOT NULL,
+  `device_name` varchar(50) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=online,0=offline'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_device`
+--
+
+INSERT INTO `tb_device` (`device_id`, `device_name`, `status`) VALUES
+(5, 'XI TKJ 3', 1),
+(6, 'XI TKJ 2', 0),
+(7, 'XI ULW 2', 1),
+(8, 'XI TKJ 6', 0),
+(9, 'XI TKR 5', 0),
+(10, 'X TJKT 1', 0);
+
+--
+-- Triggers `tb_device`
+--
+DELIMITER $$
+CREATE TRIGGER `trigger_device_id` AFTER INSERT ON `tb_device` FOR EACH ROW BEGIN
+    INSERT INTO `tb_device_status` (
+        `device_id`, 
+        `wifi_signal`, 
+        `last_update`,
+        `sensor_cam`,
+        `sensor_ultrasonic`,
+        `sensor_proximity`,
+        `servo`,
+        `lcd`,
+        `kapasitas_organik`,
+        `kapasitas_anorganik`,
+        `kapasitas_logam`,
+        `sorting_today`
+    ) VALUES (
+        NEW.device_id,
+        0,
+        NOW(),
+        0, 0, 0, 0, 0, 0, 0, 0, 0
+    );
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_device_status`
+--
+
+CREATE TABLE `tb_device_status` (
+  `id` int(11) NOT NULL,
+  `device_id` int(11) NOT NULL,
+  `wifi_signal` int(11) NOT NULL DEFAULT 0,
+  `last_update` datetime NOT NULL,
+  `sensor_cam` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=online,0=offline',
+  `sensor_ultrasonic` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=online,0=offline',
+  `sensor_proximity` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=online,0=offline',
+  `servo` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=online,0=offline',
+  `lcd` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=online,0=offline',
+  `kapasitas_organik` int(11) NOT NULL DEFAULT 0,
+  `kapasitas_anorganik` int(11) NOT NULL DEFAULT 0,
+  `kapasitas_logam` int(11) NOT NULL DEFAULT 0,
+  `sorting_today` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_device_status`
+--
+
+INSERT INTO `tb_device_status` (`id`, `device_id`, `wifi_signal`, `last_update`, `sensor_cam`, `sensor_ultrasonic`, `sensor_proximity`, `servo`, `lcd`, `kapasitas_organik`, `kapasitas_anorganik`, `kapasitas_logam`, `sorting_today`) VALUES
+(7, 5, 80, '2025-10-28 13:13:42', 1, 0, 0, 0, 0, 67, 56, 90, 4),
+(8, 6, 0, '2025-10-28 13:15:03', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(9, 7, 0, '2025-10-28 13:15:12', 0, 0, 0, 0, 0, 0, 0, 0, 78),
+(10, 8, 0, '2025-10-28 13:15:20', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(11, 9, 0, '2025-10-28 13:15:31', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(12, 10, 0, '2025-10-29 16:35:40', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_sorting_history`
+--
+
+CREATE TABLE `tb_sorting_history` (
+  `id` int(11) NOT NULL,
+  `device_id` int(11) NOT NULL,
+  `jenis_sampah` enum('logam','organik','anorganik') NOT NULL,
+  `jumlah` int(11) NOT NULL DEFAULT 1,
+  `tanggal` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_sorting_history`
+--
+
+INSERT INTO `tb_sorting_history` (`id`, `device_id`, `jenis_sampah`, `jumlah`, `tanggal`) VALUES
+(109, 5, 'organik', 13, '2025-10-29 15:30:10'),
+(110, 5, 'logam', 8, '2025-10-29 15:31:39'),
+(111, 5, 'anorganik', 6, '2025-10-29 15:31:39'),
+(112, 5, 'organik', 44, '2025-01-15 15:34:34'),
+(113, 5, 'anorganik', 32, '2025-01-14 15:34:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_user`
+--
+
+CREATE TABLE `tb_user` (
+  `id_user` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_user`
+--
+
+INSERT INTO `tb_user` (`id_user`, `username`, `password`) VALUES
+(1, 'petugas_1', 'petugas_1'),
+(2, 'petugas_2', 'petugas_2'),
+(8, 'petugas_3', 'PETUGAS_3');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tb_device`
+--
+ALTER TABLE `tb_device`
+  ADD PRIMARY KEY (`device_id`);
+
+--
+-- Indexes for table `tb_device_status`
+--
+ALTER TABLE `tb_device_status`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_device_id` (`device_id`);
+
+--
+-- Indexes for table `tb_sorting_history`
+--
+ALTER TABLE `tb_sorting_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_sorting_device` (`device_id`);
+
+--
+-- Indexes for table `tb_user`
+--
+ALTER TABLE `tb_user`
+  ADD PRIMARY KEY (`id_user`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tb_device`
+--
+ALTER TABLE `tb_device`
+  MODIFY `device_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `tb_device_status`
+--
+ALTER TABLE `tb_device_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `tb_sorting_history`
+--
+ALTER TABLE `tb_sorting_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+
+--
+-- AUTO_INCREMENT for table `tb_user`
+--
+ALTER TABLE `tb_user`
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tb_device_status`
+--
+ALTER TABLE `tb_device_status`
+  ADD CONSTRAINT `fk_device_status_device` FOREIGN KEY (`device_id`) REFERENCES `tb_device` (`device_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tb_sorting_history`
+--
+ALTER TABLE `tb_sorting_history`
+  ADD CONSTRAINT `fk_sorting_device` FOREIGN KEY (`device_id`) REFERENCES `tb_device` (`device_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
