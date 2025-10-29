@@ -8,6 +8,35 @@
       exit();
    }
 
+    //TOTAL PERANGKAT
+    $q_total = mysqli_query($conn, "SELECT COUNT(*) AS total_perangkat FROM tb_device");
+    $totalPerangkat = mysqli_fetch_assoc($q_total);
+
+    //TOTAL PERANGKAT YANG ONLINE
+    $q_online = mysqli_query($conn, "SELECT COUNT(*) AS perangkat_online FROM tb_device WHERE status = 1");
+    $perangkatOnline = mysqli_fetch_assoc($q_online);
+    
+
+   // Menghitung total pemilahan
+   $q_total_pemilahan = mysqli_query($conn,"SELECT SUM(sorting_today) AS total_pemilahan FROM tb_device_status");
+   $result_total_pemilahan = mysqli_fetch_assoc($q_total_pemilahan);
+   $total_pemilahan = $result_total_pemilahan['total_pemilahan'];
+
+   // Menghitung device yang perlu dikosongkan
+   $q_perlu_dikosongkan = mysqli_query(
+      $conn,
+      "SELECT COUNT(*) 
+      AS perlu_dikosongkan 
+      FROM tb_device_status 
+      WHERE GREATEST(
+         COALESCE(kapasitas_logam,0),
+         COALESCE(kapasitas_organik,0),
+         COALESCE(kapasitas_anorganik,0)
+      ) >= 80");
+   $result_perlu_dikosongkan = mysqli_fetch_assoc($q_perlu_dikosongkan);
+   $perlu_dikosongkan = $result_perlu_dikosongkan['perlu_dikosongkan'];
+
+
     $query = "SELECT 
         d.device_id,
         d.device_name,
@@ -117,7 +146,7 @@
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Total Perangkat</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400">4</h1>
+                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $totalPerangkat['total_perangkat'];?></h1>
                 </div>
             </div>
           
@@ -128,7 +157,7 @@
                </div>
                 <div class="text-slate-200">
                    <h2 class="text-sm md:text-base text-slate-400">Status Sistem</h2>
-                   <h1 class="text-xl font-medium text-emerald-400">1/4 Online</h1>
+                   <h1 class="text-xl font-medium text-emerald-400"><?php echo $perangkatOnline['perangkat_online'];?>/<?php echo $totalPerangkat['total_perangkat'];?> Online</h1>
                 </div>
             </div>
             <!-- card 3 -->
@@ -138,7 +167,7 @@
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Total Pemilahan</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400">47</h1>
+                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $total_pemilahan;?></h1>
                 </div>
             </div>
             <!-- card 4 -->
@@ -148,7 +177,7 @@
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Perlu Dikosongkan</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400">2</h1>
+                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $perlu_dikosongkan;?></h1>
                 </div>
             </div>
          </div>

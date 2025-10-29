@@ -32,6 +32,25 @@ if (!empty($_SESSION['device_id'])) {
    $result_perangkat_online = mysqli_fetch_assoc($q_perangkat_online);
    $total_online = $result_perangkat_online['total_online'];
 
+   // Menghitung total pemilahan
+   $q_total_pemilahan = mysqli_query($conn,"SELECT SUM(sorting_today) AS total_pemilahan FROM tb_device_status");
+   $result_total_pemilahan = mysqli_fetch_assoc($q_total_pemilahan);
+   $total_pemilahan = $result_total_pemilahan['total_pemilahan'];
+
+   // Menghitung device yang perlu dikosongkan
+   $q_perlu_dikosongkan = mysqli_query(
+      $conn,
+      "SELECT COUNT(*) 
+      AS perlu_dikosongkan 
+      FROM tb_device_status 
+      WHERE GREATEST(
+         COALESCE(kapasitas_logam,0),
+         COALESCE(kapasitas_organik,0),
+         COALESCE(kapasitas_anorganik,0)
+      ) >= 80");
+   $result_perlu_dikosongkan = mysqli_fetch_assoc($q_perlu_dikosongkan);
+   $perlu_dikosongkan = $result_perlu_dikosongkan['perlu_dikosongkan'];
+
     $query = "SELECT 
         d.device_id,
         d.device_name,
@@ -172,7 +191,7 @@ if (!empty($_SESSION['device_id'])) {
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Total Pemilahan</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400">47</h1>
+                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $total_pemilahan; ?></h1>
                 </div>
             </div>
             
@@ -183,7 +202,7 @@ if (!empty($_SESSION['device_id'])) {
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Perlu Dikosongkan</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400">2</h1>
+                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $perlu_dikosongkan; ?></h1>
                 </div>
             </div>
          </div>
@@ -200,11 +219,27 @@ if (!empty($_SESSION['device_id'])) {
             <p class="mb-2 text-lg text-emerald-400 font-medium"><?php echo $result['device_name']; ?></p>
             <div class="w-full h-0.5 bg-gradient-to-r from-emerald-500 to-transparent rounded-full"></div>
          </div>
+<!-- Konten 2 - Chart dengan Filter Buttons -->
+<div class="w-full bg-slate-800 border border-emerald-500/20 rounded-xl overflow-hidden p-4 mb-5 shadow-xl">
+    <!-- Filter Buttons -->
+    <div class="flex gap-2 mb-4 justify-end">
+        <button onclick="updateChart('day')" id="btn-day" class="flex flex-wrap items-center justify-center lg:gap-1 filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
+            <i class="fa-solid fa-calendar-day"></i> Hari Ini
+        </button>
+        <button onclick="updateChart('week')" id="btn-week" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
+            <i class="fa-solid fa-calendar-week"></i> Minggu
+        </button>
+        <button onclick="updateChart('year')" id="btn-year" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
+            <i class="fa-solid fa-calendar-days"></i> Tahun
+        </button>
+    </div>
+    
+    <!-- Chart Canvas -->
+    <div class="w-full h-80">
+        <canvas id="myChart" class="w-full h-full block"></canvas>
+    </div>
+</div>
 
-        <!-- Konten 2 - Chart -->
-        <div class="w-full h-64 bg-slate-800 border border-emerald-500/20 rounded-xl overflow-hidden p-4 mb-5 shadow-xl">
-         <canvas id="myChart" class="w-full h-full block"></canvas>
-        </div>
         
         <!-- Konten 3 - Gauge Charts -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-5">
@@ -270,92 +305,145 @@ if (!empty($_SESSION['device_id'])) {
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const ctx = document.getElementById('myChart');
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Logam', 'Organik', 'Anorganik'],
-    datasets: [{
-      label: 'Hari ini',
-      data: [45, 55, 90],
-      fill: false,
-      borderColor: '#10b981',
-      backgroundColor: '#10b981',
-      tension: 0.4,
-      borderWidth: 3,
-      pointRadius: 5,
-      pointHoverRadius: 7,
-      pointBackgroundColor: '#10b981',
-      pointBorderColor: '#0f172a',
-      pointBorderWidth: 2
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    layout: { padding: 10 },
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          color: '#cbd5e1',
-          font: {
-            size: 14,
-            weight: '500'
-          },
-          padding: 15,
-          usePointStyle: true
-        }
-      },
-      tooltip: {
-        backgroundColor: '#1e293b',
-        titleColor: '#10b981',
-        bodyColor: '#cbd5e1',
-        borderColor: '#10b981',
-        borderWidth: 1,
-        padding: 12,
-        displayColors: true,
-        callbacks: {
-          label: function(context) {
-            return context.dataset.label + ': ' + context.parsed.y + ' items';
-          }
-        }
+      const ctx = document.getElementById('myChart');
+      let myChart;
+
+      // Inisialisasi chart
+      function initChart(chartData, filter) {
+         if (myChart) myChart.destroy();
+
+         // jika filter 'day' => bar, kalau 'week' atau 'year' => line
+         let chartType = (filter === 'day') ? 'bar' : 'line';
+
+         myChart = new Chart(ctx, {
+            type: chartType,
+            data: {
+                  labels: chartData.labels,
+                  datasets: chartData.datasets
+            },
+            options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  interaction: { mode: 'index', intersect: false },
+                  plugins: {
+                     legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                              color: '#cbd5e1',
+                              font: { size: 13, weight: '500' },
+                              padding: 15,
+                              usePointStyle: true,
+                              boxWidth: 8,
+                              boxHeight: 8
+                        }
+                     },
+                     tooltip: {
+                        backgroundColor: 'rgba(15,23,42,0.95)',
+                        titleColor: '#10b981',
+                        bodyColor: '#cbd5e1',
+                        borderColor: '#10b981',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                              label: function(context) {
+                                 let label = context.dataset.label || '';
+                                 if (label) label += ': ';
+                                 label += context.parsed.y + ' item' + (context.parsed.y !== 1 ? 's' : '');
+                                 return label;
+                              },
+                              footer: function(tooltipItems) {
+                                 let total = 0;
+                                 tooltipItems.forEach(item => total += item.parsed.y);
+                                 return 'Total: ' + total + ' items';
+                              }
+                        },
+                        footerColor: '#fbbf24'
+                     },
+                     title: {
+                        display: true,
+                        text: getTitleText(filter),
+                        color: '#cbd5e1',
+                        font: { size: 16, weight: 'bold' },
+                        padding: { bottom: 20 }
+                     }
+                  },
+                  scales: {
+                     x: {
+                        grid: { display: true, color: 'rgba(30,41,59,0.5)', drawBorder: false },
+                        ticks: { padding: 8, color: '#cbd5e1', font: { size: 11 } }
+                     },
+                     y: {
+                        beginAtZero: true,
+                        grid: { display: true, color: 'rgba(30,41,59,0.5)', drawBorder: false },
+                        ticks: { padding: 8, color: '#cbd5e1', font: { size: 11 }, stepSize: 1,
+                              callback: function(value) { if (Number.isInteger(value)) return value; }
+                        }
+                     }
+                  }
+            }
+         });
       }
-    },
-    scales: {
-      x: {
-        grid: { 
-          display: true,
-          color: '#1e293b',
-          drawBorder: false 
-        },
-        ticks: {
-          padding: 8,
-          color: '#cbd5e1',
-          font: {
-            size: 12
-          }
-        }
-      },
-      y: {
-        beginAtZero: true,
-        grid: { 
-          display: true,
-          color: '#1e293b',
-          drawBorder: false 
-        },
-        ticks: {
-          padding: 8,
-          color: '#cbd5e1',
-          font: {
-            size: 12
-          }
-        }
+
+      // Judul chart (hilangkan bulan case)
+      function getTitleText(filter) {
+         const monthNames = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+         const today = new Date();
+         const currentMonth = monthNames[today.getMonth()];
+         const currentYear = today.getFullYear();
+
+         switch(filter) {
+            case 'day': return 'Timbulan Sampah Hari Ini';
+            case 'week': return 'Timbulan Sampah Minggu Ini';
+            case 'year': return 'Timbulan Sampah Tahun Ini';
+            default: return 'Timbulan Sampah';
+         }
       }
-    }
-  }
-});
+
+      // Update chart dan tombol aktif
+      function updateChart(filter) {
+         document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active', 'bg-emerald-500', 'text-white');
+            btn.classList.add('bg-slate-700', 'text-slate-300');
+         });
+
+         const activeBtn = document.getElementById('btn-' + filter);
+         if (activeBtn) {
+            activeBtn.classList.remove('bg-slate-700', 'text-slate-300');
+            activeBtn.classList.add('active', 'bg-emerald-500', 'text-white');
+         }
+
+         const chartContainer = document.getElementById('myChart').parentElement;
+         chartContainer.style.opacity = '0.5';
+
+         fetch('get_chart_data.php?filter=' + filter)
+            .then(response => {
+                  if (!response.ok) throw new Error('Network response not ok');
+                  return response.json();
+            })
+            .then(result => {
+                  chartContainer.style.opacity = '1';
+                  if (result.error) { console.error('API Error:', result.error); alert('Error: ' + result.error); return; }
+                  initChart(result, filter);
+            })
+            .catch(error => {
+                  chartContainer.style.opacity = '1';
+                  console.error('Fetch Error:', error);
+                  if (myChart) myChart.destroy();
+                  new Chart(ctx, {
+                     type: 'bar',
+                     data: { labels: ['Error'], datasets: [{ label: 'No Data', data: [0], backgroundColor: '#ef4444' }] },
+                     options: { plugins: { title: { display: true, text: '❌ Gagal memuat data. Cek koneksi atau API.', color: '#ef4444' } } }
+                  });
+            });
+      }
+
+      // Default load
+      document.addEventListener('DOMContentLoaded', function() {
+         updateChart('day');
+      });
 </script>
+
 </body>
 </html>
