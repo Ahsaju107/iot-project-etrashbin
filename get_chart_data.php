@@ -42,14 +42,15 @@ if ($filter == 'day') {
         }
     }
     
+    // Ubah urutan menjadi: Organik, Anorganik, Logam
     echo json_encode([
-        'labels' => ['Logam', 'Organik', 'Anorganik'],
+        'labels' => ['Organik', 'Anorganik', 'Logam'],
         'datasets' => [
             [
                 'label' => 'Hari Ini',
-                'data' => [$data['logam'], $data['organik'], $data['anorganik']],
-                'backgroundColor' => ['#f59e0b', '#10b981', '#3b82f6'],
-                'borderColor' => ['#f59e0b', '#10b981', '#3b82f6'],
+                'data' => [$data['organik'], $data['anorganik'], $data['logam']],
+                'backgroundColor' => ['#10b981', '#3b82f6', '#f59e0b'],
+                'borderColor' => ['#10b981', '#3b82f6', '#f59e0b'],
                 'borderWidth' => 3
             ]
         ],
@@ -100,17 +101,10 @@ else if ($filter == 'week') {
     $organik_data = array_column($weekData, 'organik');
     $anorganik_data = array_column($weekData, 'anorganik');
     
+    // Urutan dataset: Organik, Anorganik, Logam
     echo json_encode([
         'labels' => $labels,
         'datasets' => [
-            [
-                'label' => 'Logam',
-                'data' => $logam_data,
-                'backgroundColor' => '#f59e0b',
-                'borderColor' => '#f59e0b',
-                'borderWidth' => 2,
-                'tension' => 0.4
-            ],
             [
                 'label' => 'Organik',
                 'data' => $organik_data,
@@ -124,6 +118,14 @@ else if ($filter == 'week') {
                 'data' => $anorganik_data,
                 'backgroundColor' => '#3b82f6',
                 'borderColor' => '#3b82f6',
+                'borderWidth' => 2,
+                'tension' => 0.4
+            ],
+            [
+                'label' => 'Logam',
+                'data' => $logam_data,
+                'backgroundColor' => '#f59e0b',
+                'borderColor' => '#f59e0b',
                 'borderWidth' => 2,
                 'tension' => 0.4
             ]
@@ -170,18 +172,10 @@ else if ($filter == 'month') {
     $organik_data = array_column($monthData, 'organik');
     $anorganik_data = array_column($monthData, 'anorganik');
     
+    // Urutan dataset: Organik, Anorganik, Logam
     echo json_encode([
         'labels' => $labels,
         'datasets' => [
-            [
-                'label' => 'Logam',
-                'data' => $logam_data,
-                'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
-                'borderColor' => '#f59e0b',
-                'borderWidth' => 2,
-                'tension' => 0.4,
-                'fill' => true
-            ],
             [
                 'label' => 'Organik',
                 'data' => $organik_data,
@@ -196,6 +190,15 @@ else if ($filter == 'month') {
                 'data' => $anorganik_data,
                 'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
                 'borderColor' => '#3b82f6',
+                'borderWidth' => 2,
+                'tension' => 0.4,
+                'fill' => true
+            ],
+            [
+                'label' => 'Logam',
+                'data' => $logam_data,
+                'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
+                'borderColor' => '#f59e0b',
                 'borderWidth' => 2,
                 'tension' => 0.4,
                 'fill' => true
@@ -252,15 +255,6 @@ else if ($filter == 'year') {
         'labels' => $labels,
         'datasets' => [
             [
-                'label' => 'Logam',
-                'data' => $logam_data,
-                'backgroundColor' => 'rgba(245, 158, 11, 0.2)',
-                'borderColor' => '#f59e0b',
-                'borderWidth' => 3,
-                'tension' => 0.4,
-                'fill' => true
-            ],
-            [
                 'label' => 'Organik',
                 'data' => $organik_data,
                 'backgroundColor' => 'rgba(16, 185, 129, 0.2)',
@@ -274,6 +268,15 @@ else if ($filter == 'year') {
                 'data' => $anorganik_data,
                 'backgroundColor' => 'rgba(59, 130, 246, 0.2)',
                 'borderColor' => '#3b82f6',
+                'borderWidth' => 3,
+                'tension' => 0.4,
+                'fill' => true
+            ],
+            [
+                'label' => 'Logam',
+                'data' => $logam_data,
+                'backgroundColor' => 'rgba(245, 158, 11, 0.2)',
+                'borderColor' => '#f59e0b',
                 'borderWidth' => 3,
                 'tension' => 0.4,
                 'fill' => true

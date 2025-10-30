@@ -219,47 +219,32 @@ if (!empty($_SESSION['device_id'])) {
             <p class="mb-2 text-lg text-emerald-400 font-medium"><?php echo $result['device_name']; ?></p>
             <div class="w-full h-0.5 bg-gradient-to-r from-emerald-500 to-transparent rounded-full"></div>
          </div>
-<!-- Konten 2 - Chart dengan Filter Buttons -->
-<div class="w-full bg-slate-800 border border-emerald-500/20 rounded-xl overflow-hidden p-4 mb-5 shadow-xl">
-    <!-- Filter Buttons -->
-    <div class="flex gap-2 mb-4 justify-end">
-        <button onclick="updateChart('day')" id="btn-day" class="flex flex-wrap items-center justify-center lg:gap-1 filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
-            <i class="fa-solid fa-calendar-day"></i> Hari Ini
-        </button>
-        <button onclick="updateChart('week')" id="btn-week" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
-            <i class="fa-solid fa-calendar-week"></i> Minggu
-        </button>
-        <button onclick="updateChart('year')" id="btn-year" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
-            <i class="fa-solid fa-calendar-days"></i> Tahun
-        </button>
-    </div>
-    
-    <!-- Chart Canvas -->
-    <div class="w-full h-80">
-        <canvas id="myChart" class="w-full h-full block"></canvas>
-    </div>
-</div>
+
+         <!-- Konten 2 - Chart -->
+         <div class="w-full bg-slate-800 border border-emerald-500/20 rounded-xl overflow-hidden p-4 mb-5 shadow-xl">
+            <!-- Filter Buttons -->
+            <div class="flex gap-2 mb-4 justify-end">
+               <button onclick="updateChart('day')" id="btn-day" class="flex flex-wrap items-center justify-center lg:gap-1 filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
+                     <i class="fa-solid fa-calendar-day"></i> Hari
+               </button>
+               <button onclick="updateChart('week')" id="btn-week" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
+                     <i class="fa-solid fa-calendar-week"></i> Minggu
+               </button>
+               <button onclick="updateChart('year')" id="btn-year" class="filter-btn px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-slate-700 text-slate-300 hover:bg-slate-600">
+                     <i class="fa-solid fa-calendar-days"></i> Tahun
+               </button>
+            </div>
+            
+            <!-- Chart Canvas -->
+            <div class="w-full h-80">
+               <canvas id="myChart" class="w-full h-full block"></canvas>
+            </div>
+         </div>
 
         
         <!-- Konten 3 - Gauge Charts -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-5">
-            <!-- Logam Gauge -->
-            <div class="bg-slate-800 border border-emerald-500/20 text-white p-4 h-[200px] lg:h-[240px] rounded-xl shadow-xl hover:border-emerald-500/40 transition-all duration-200">
-               <div class="flex items-center gap-2 mb-3">
-                  <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                     <i class="fa-solid fa-magnet text-emerald-400"></i>
-                  </div>
-                  <h1 class="font-semibold text-lg text-slate-200">Logam</h1>
-               </div>
-               <div class="card text-center">
-                  <div class="gauge">
-                     <div class="gauge__body">
-                        <div class="gauge__fill" style="transform: rotate(<?php echo $rotasi_logam; ?>turn);"></div>
-                        <div class="gauge__cover text-white"><?php echo $resultData['kapasitas_logam']; ?>%</div>
-                     </div>
-                  </div>
-               </div>
-            </div>
+            
             
             <!-- Organik Gauge -->
             <div class="bg-slate-800 border border-emerald-500/20 text-white p-4 h-[200px] lg:h-[240px] rounded-xl shadow-xl hover:border-emerald-500/40 transition-all duration-200">
@@ -296,6 +281,24 @@ if (!empty($_SESSION['device_id'])) {
                   </div>
                </div>
             </div>
+            <!-- Logam Gauge -->
+            <div class="bg-slate-800 border border-emerald-500/20 text-white p-4 h-[200px] lg:h-[240px] rounded-xl shadow-xl hover:border-emerald-500/40 transition-all duration-200">
+               <div class="flex items-center gap-2 mb-3">
+                  <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                     <i class="fa-solid fa-magnet text-emerald-400"></i>
+                  </div>
+                  <h1 class="font-semibold text-lg text-slate-200">Logam</h1>
+               </div>
+               <div class="card text-center">
+                  <div class="gauge">
+                     <div class="gauge__body">
+                        <div class="gauge__fill" style="transform: rotate(<?php echo $rotasi_logam; ?>turn);"></div>
+                        <div class="gauge__cover text-white"><?php echo $resultData['kapasitas_logam']; ?>%</div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            
         </div>
    </div>
 </div>
@@ -443,6 +446,30 @@ if (!empty($_SESSION['device_id'])) {
       document.addEventListener('DOMContentLoaded', function() {
          updateChart('day');
       });
+</script>
+<script>
+   function checkDeviceStatus() {
+      fetch('../check_device_status.php')
+         .then(response => response.json())
+         .then(data => {
+               console.log('Device Status Check:', data);
+               
+               // Jika ada device yang berubah jadi offline, reload page
+               if (data.status === 'success' && data.message.includes('set to offline')) {
+                  console.log('⚠️ Device status changed! Reloading...');
+                  location.reload();
+               }
+         })
+         .catch(error => {
+               console.error('Status check error:', error);
+         });
+   }
+
+   // Jalankan pertama kali saat page load
+   checkDeviceStatus();
+
+   // Jalankan setiap 30 detik
+   setInterval(checkDeviceStatus, 30000);
 </script>
 
 </body>

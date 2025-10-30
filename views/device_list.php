@@ -166,5 +166,30 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<script>
+   function checkDeviceStatus() {
+      fetch('../check_device_status.php')
+         .then(response => response.json())
+         .then(data => {
+               console.log('Device Status Check:', data);
+               
+               // Jika ada device yang berubah jadi offline, reload page
+               if (data.status === 'success' && data.message.includes('set to offline')) {
+                  console.log('⚠️ Device status changed! Reloading...');
+                  location.reload();
+               }
+         })
+         .catch(error => {
+               console.error('Status check error:', error);
+         });
+   }
+
+   // Jalankan pertama kali saat page load
+   checkDeviceStatus();
+
+   // Jalankan setiap 30 detik
+   setInterval(checkDeviceStatus, 30000);
+</script>
+
 </body>
 </html>
