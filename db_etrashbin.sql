@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 30, 2025 at 02:36 AM
+-- Host: localhost
+-- Generation Time: Oct 30, 2025 at 09:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -70,6 +70,18 @@ CREATE TRIGGER `trigger_device_id` AFTER INSERT ON `tb_device` FOR EACH ROW BEGI
 END
 $$
 DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trigger_status_info` AFTER UPDATE ON `tb_device` FOR EACH ROW BEGIN
+-- JIKA SEBELUMNYA STATUSNYA ONLINE DAN MEJADI OFFLINE
+IF NEW.status = 1 AND OLD.status = 0 THEN INSERT INTO tb_history(device_id,message) VALUES(NEW.device_id,CONCAT('Perangkat Aktif!'));
+END IF;
+
+-- JIKA TERJADI PERUBAHAN DARI OFFLINE KE ONLINE
+IF NEW.status = 0 AND OLD.status = 1 THEN INSERT INTO tb_history(device_id,message) VALUES(NEW.device_id,CONCAT('Perangkat Mati!'));
+END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -98,10 +110,93 @@ CREATE TABLE `tb_device_status` (
 --
 
 INSERT INTO `tb_device_status` (`id`, `device_id`, `wifi_signal`, `last_update`, `sensor_cam`, `sensor_ultrasonic`, `sensor_proximity`, `servo`, `lcd`, `kapasitas_organik`, `kapasitas_anorganik`, `kapasitas_logam`, `sorting_today`) VALUES
-(7, 5, 0, '2025-10-30 08:26:32', 0, 0, 0, 0, 0, 42, 88, 78, 32),
+(7, 5, 0, '2025-10-30 15:27:55', 0, 0, 0, 0, 0, 87, 56, 90, 32),
 (8, 6, 0, '2025-10-28 13:15:03', 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (9, 7, 0, '2025-10-28 13:15:12', 0, 0, 0, 0, 0, 0, 0, 0, 78),
 (10, 8, 0, '2025-10-28 13:15:20', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+--
+-- Triggers `tb_device_status`
+--
+DELIMITER $$
+CREATE TRIGGER `trigger_kapasitas_warning` AFTER UPDATE ON `tb_device_status` FOR EACH ROW BEGIN
+  DECLARE msg VARCHAR(255);
+  -- Organik
+  IF NEW.kapasitas_organik IS NOT NULL 
+     AND NEW.kapasitas_organik >= 80 
+     AND (OLD.kapasitas_organik IS NULL OR OLD.kapasitas_organik < 80) THEN
+
+     SET msg = CONCAT('Kapasitas organik mencapai ', NEW.kapasitas_organik, '%');
+
+     -- Cegah duplikat: cek apakah pesan yang sama sudah dibuat dalam 2 menit terakhir
+     IF NOT EXISTS(
+        SELECT 1 FROM tb_history h 
+        WHERE h.device_id = NEW.device_id 
+          AND h.message = msg 
+          AND h.created_at >= NOW() - INTERVAL 2 MINUTE
+     ) THEN
+        INSERT INTO tb_history(device_id, message) VALUES (NEW.device_id, msg);
+     END IF;
+  END IF;
+
+  -- Anorganik
+  IF NEW.kapasitas_anorganik IS NOT NULL 
+     AND NEW.kapasitas_anorganik >= 80 
+     AND (OLD.kapasitas_anorganik IS NULL OR OLD.kapasitas_anorganik < 80) THEN
+
+     SET msg = CONCAT('Kapasitas anorganik mencapai ', NEW.kapasitas_anorganik, '%');
+
+     IF NOT EXISTS(
+        SELECT 1 FROM tb_history h 
+        WHERE h.device_id = NEW.device_id 
+          AND h.message = msg 
+          AND h.created_at >= NOW() - INTERVAL 2 MINUTE
+     ) THEN
+        INSERT INTO tb_history(device_id, message) VALUES (NEW.device_id, msg);
+     END IF;
+  END IF;
+
+  -- Logam
+  IF NEW.kapasitas_logam IS NOT NULL 
+     AND NEW.kapasitas_logam >= 80 
+     AND (OLD.kapasitas_logam IS NULL OR OLD.kapasitas_logam < 80) THEN
+
+     SET msg = CONCAT('Kapasitas logam mencapai ', NEW.kapasitas_logam, '%');
+
+     IF NOT EXISTS(
+        SELECT 1 FROM tb_history h 
+        WHERE h.device_id = NEW.device_id 
+          AND h.message = msg 
+          AND h.created_at >= NOW() - INTERVAL 2 MINUTE
+     ) THEN
+        INSERT INTO tb_history(device_id, message) VALUES (NEW.device_id, msg);
+     END IF;
+  END IF;
+
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_history`
+--
+
+CREATE TABLE `tb_history` (
+  `id` int(11) NOT NULL,
+  `device_id` int(11) NOT NULL,
+  `message` text NOT NULL COMMENT 'Pesan history',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_history`
+--
+
+INSERT INTO `tb_history` (`id`, `device_id`, `message`, `created_at`) VALUES
+(46, 5, 'Perangkat Aktif!', '2025-10-30 15:27:55'),
+(47, 5, 'Perangkat Mati!', '2025-10-30 15:28:58');
 
 -- --------------------------------------------------------
 
@@ -203,6 +298,14 @@ ALTER TABLE `tb_device_status`
   ADD KEY `fk_device_id` (`device_id`);
 
 --
+-- Indexes for table `tb_history`
+--
+ALTER TABLE `tb_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_history_device` (`device_id`),
+  ADD KEY `idx_device_date` (`device_id`,`created_at`);
+
+--
 -- Indexes for table `tb_sorting_history`
 --
 ALTER TABLE `tb_sorting_history`
@@ -232,6 +335,12 @@ ALTER TABLE `tb_device_status`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT for table `tb_history`
+--
+ALTER TABLE `tb_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+
+--
 -- AUTO_INCREMENT for table `tb_sorting_history`
 --
 ALTER TABLE `tb_sorting_history`
@@ -252,6 +361,12 @@ ALTER TABLE `tb_user`
 --
 ALTER TABLE `tb_device_status`
   ADD CONSTRAINT `fk_device_status_device` FOREIGN KEY (`device_id`) REFERENCES `tb_device` (`device_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tb_history`
+--
+ALTER TABLE `tb_history`
+  ADD CONSTRAINT `fk_history_device` FOREIGN KEY (`device_id`) REFERENCES `tb_device` (`device_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tb_sorting_history`

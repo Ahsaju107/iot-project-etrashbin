@@ -58,6 +58,45 @@
 
     $sql = mysqli_query($conn,$query);
     $result = mysqli_fetch_assoc($sql);
+
+    // QUERY HISTORY
+    $query_history = "SELECT * FROM tb_history WHERE device_id = '{$_SESSION['device_id']}' LIMIT 10";
+    $sql_history = mysqli_query($conn,$query_history);
+
+    // Fungsi format waktu relatif
+        function timeAgo($input){
+        // Jika input numeric => anggap sudah selisih detik
+        if (is_numeric($input)) {
+            $detik = (int)$input;
+        } else {
+            // Jika string (datetime), hitung selisih dari sekarang
+            $ts = strtotime($input);
+            if ($ts === false) {
+                // Jika tidak bisa di-parse, kembalikan teks fallback
+                return 'unknown';
+            }
+            $detik = time() - $ts;
+        }
+
+        if($detik < 60){
+            return $detik . " detik yang lalu";
+        } elseif($detik < 3600){
+            $menit = floor($detik / 60);
+            return $menit . " menit yang lalu";
+        } elseif($detik < 86400){
+            $jam = floor($detik / 3600);
+            return $jam . " jam yang lalu";
+        } else {
+            $hari = floor($detik / 86400);
+            return $hari . " hari yang lalu";
+        }
+    }
+
+
+    // Hitung selisih waktu last update
+    $last_update = strtotime($result['last_update']);
+    $current_time = time();
+    $time_diff = $current_time - $last_update;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -457,7 +496,7 @@
                 <!-- Item status Update Terakhir kali -->
                 <div class="flex flex-col bg-slate-700/50 w-full items-center rounded-lg text-center hover:ring-2 hover:ring-emerald-500/50 p-4 mx-auto shadow-lg hover:bg-slate-700 transition-all duration-200">
                     <i class="fa-solid fa-clock text-3xl text-emerald-400 mb-2"></i>
-                    <h2 class="font-semibold text-xl text-slate-200">5 detik terakhir</h2>
+                    <h2 class="font-semibold text-xl text-slate-200"><?php echo timeAgo($result['last_update']); ?></h2>
                     <p class="text-slate-400">Update Terakhir</p>
                 </div>
 
@@ -468,33 +507,39 @@
            
           <!-- KONTEN 4 -->
           <div class="w-full p-4 rounded-xl bg-slate-800 text-white shadow-xl">
-            <h1 class="text-2xl font-bold mb-4 text-slate-200">History</h1>
+            <div class="flex justify-between w-full">
+                <h1 class="text-2xl font-bold mb-4 text-slate-200">History</h1>
+                <form action="../proses.php" method="post">
+                    <a href="../proses.php?hapus_history" class="del-btn text-red-500 hover:underline hover:text-red-600 rounded-md mr-2">Hapus semua</a>
+                </form>
+            </div>
             <div class="flex flex-wrap gap-3">
-            <!-- ITEM 1 -->
-            <div class="w-full flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg shadow-lg hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 hover:bg-slate-700 duration-200 transition-all">
-                <i class="fa-solid fa-circle-info text-emerald-400 text-xl"></i>
-                <div>
-                    <h2 class="font-medium text-emerald-400 text-base">Kapasitas anorganik mencapai 78%</h2>
-                    <p class="text-slate-400 text-sm">23 Okt 2025, 09:12:15</p>
+            <?php
+                if(mysqli_num_rows($sql_history) > 0){
+            ?>
+                <?php 
+                    while($history = mysqli_fetch_assoc($sql_history)){
+                ?>
+                        <!-- ITEM 1 -->
+                    <div class="w-full flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg shadow-lg hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 hover:bg-slate-700 duration-200 transition-all">
+                        <i class="fa-solid fa-circle-info text-emerald-400 text-xl"></i>
+                        <div>
+                            <h2 class="font-medium text-emerald-400 text-base"><?php echo $history['message']; ?></h2>
+                            <p class="text-slate-400 text-sm"><?php echo $history['created_at']; ?></p>   
+                        </div>
+                    </div>
+                <?php } ?>
+            
+            <?php
+             } else {
+            ?>
+                <div class="w-full p-1 text-slate-500/70 flex justify-center">
+                    <h1>Tidak ada history</h1>
                 </div>
-            </div>
-            <!-- ITEM 2 -->
-            <div class="w-full flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg shadow-lg hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 hover:bg-slate-700 duration-200 transition-all">
-                <i class="fa-solid fa-circle-info text-emerald-400 text-xl"></i>
-                <div>
-                    <h2 class="font-medium text-emerald-400 text-base">Kapasitas organik mencapai 80%</h2>
-                    <p class="text-slate-400 text-sm">23 Okt 2025, 09:12:15</p>
-                </div>
-            </div>
-            <!-- ITEM 3 -->
-            <div class="w-full flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg shadow-lg hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 hover:bg-slate-700 duration-200 transition-all">
-                <i class="fa-solid fa-circle-info text-emerald-400 text-xl"></i>
-                <div>
-                    <h2 class="font-medium text-emerald-400 text-base">Kapasitas logam mencapai 96%</h2>
-                    <p class="text-slate-400 text-sm">23 Okt 2025, 09:12:15</p>
-                </div>
-            </div>
-            </div>
+            <?php 
+             }
+            ?>
+            
             
           </div>
           <!-- KONTEN 4 END -->

@@ -119,5 +119,16 @@
         }
     }
 
+    // FUNGSI HAPUS HISTORY
+    if(isset($_GET['hapus_history'])){
+        $query = "DELETE FROM tb_history";
+        $sql = mysqli_query($conn,$query);
+        if($sql){
+            header('location: ./views/status_perangkat.php');
+        } else {
+            echo "error: ".mysqli_error($conn);
+        }
+    }
+
 
 ?>
