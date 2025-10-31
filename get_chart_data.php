@@ -1,5 +1,4 @@
 <?php
-// File: get_chart_data.php
 session_start();
 include './koneksi.php';
 

@@ -89,6 +89,7 @@ if (!empty($_SESSION['device_id'])) {
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="./images/logo-iot.png" type="image/x-icon">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body class="bg-slate-900">
@@ -257,8 +258,8 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill" style="transform: rotate(<?php echo $rotasi_organik; ?>turn);"></div>
-                        <div class="gauge__cover text-white"><?php echo $resultData['kapasitas_organik'];?>%</div>
+                        <div class="gauge__fill" id="rotasi_organik"></div>
+                        <div class="gauge__cover text-white" id="kapasitas_organik"></div>
                      </div>
                   </div>
                </div>
@@ -275,8 +276,8 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill" style="transform: rotate(<?php echo $rotasi_anorganik; ?>turn);"></div>
-                        <div class="gauge__cover text-white"><?php echo $resultData['kapasitas_anorganik']; ?>%</div>
+                        <div class="gauge__fill" id="rotasi_anorganik"></div>
+                        <div class="gauge__cover text-white" id="kapasitas_anorganik"></div>
                      </div>
                   </div>
                </div>
@@ -292,8 +293,8 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill" style="transform: rotate(<?php echo $rotasi_logam; ?>turn);"></div>
-                        <div class="gauge__cover text-white"><?php echo $resultData['kapasitas_logam']; ?>%</div>
+                        <div class="gauge__fill" id="rotasi_logam"></div>
+                        <div class="gauge__cover text-white" id="kapasitas_logam"></div>
                      </div>
                   </div>
                </div>
@@ -307,6 +308,7 @@ if (!empty($_SESSION['device_id'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="./js/jquery.js"></script>
 <script>
       const ctx = document.getElementById('myChart');
       let myChart;
@@ -471,6 +473,29 @@ if (!empty($_SESSION['device_id'])) {
    // Jalankan setiap 30 detik
    setInterval(checkDeviceStatus, 30000);
 </script>
-
+<script>
+   $(document).ready(function(){
+      setInterval(() => {
+         // LOAD DATA ORGANIK
+         $('#kapasitas_organik').load('show_data.php?type=kapasitas_organik');
+         $.get('show_data.php?type=rotasi_organik').done(function(datanya){
+            let turns = datanya;
+            $('#rotasi_organik').css('transform', `rotate(${turns}turn)`);
+         });
+         // LOAD DATA ANORGANIK
+         $('#kapasitas_anorganik').load('show_data.php?type=kapasitas_anorganik');
+         $.get('show_data.php?type=rotasi_anorganik').done(function(datanya){
+            let turns = datanya;
+            $('#rotasi_anorganik').css('transform', `rotate(${turns}turn)`);
+         })
+         // LOAD DATA LOGAM
+         $('#kapasitas_logam').load('show_data.php?type=kapasitas_logam');
+         $.get('show_data.php?type=rotasi_logam').done(function(datanya){
+            let turns = datanya;
+            $('#rotasi_logam').css('transform', `rotate(${turns}turn)`);
+         });
+      }, 2000);
+   })
+</script>
 </body>
 </html>
