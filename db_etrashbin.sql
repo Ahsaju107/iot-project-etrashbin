@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 30, 2025 at 09:29 AM
+-- Host: 127.0.0.1
+-- Generation Time: Nov 03, 2025 at 01:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,7 @@ INSERT INTO `tb_device` (`device_id`, `device_name`, `status`) VALUES
 (5, 'XI TKJ 3', 0),
 (6, 'XI TKJ 2', 0),
 (7, 'XI ULW 2', 0),
-(8, 'XI TKJ 6', 0);
+(11, 'XI TKJ 1', 0);
 
 --
 -- Triggers `tb_device`
@@ -110,10 +110,10 @@ CREATE TABLE `tb_device_status` (
 --
 
 INSERT INTO `tb_device_status` (`id`, `device_id`, `wifi_signal`, `last_update`, `sensor_cam`, `sensor_ultrasonic`, `sensor_proximity`, `servo`, `lcd`, `kapasitas_organik`, `kapasitas_anorganik`, `kapasitas_logam`, `sorting_today`) VALUES
-(7, 5, 0, '2025-10-30 15:27:55', 0, 0, 0, 0, 0, 87, 56, 90, 32),
-(8, 6, 0, '2025-10-28 13:15:03', 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(9, 7, 0, '2025-10-28 13:15:12', 0, 0, 0, 0, 0, 0, 0, 0, 78),
-(10, 8, 0, '2025-10-28 13:15:20', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+(7, 5, 0, '2025-11-03 15:52:42', 0, 0, 0, 0, 0, 95, 76, 88, 65),
+(8, 6, 30, '2025-10-31 20:21:17', 0, 0, 0, 0, 0, 52, 44, 10, 0),
+(9, 7, 30, '2025-10-31 21:51:42', 0, 0, 0, 0, 0, 94, 77, 86, 78),
+(13, 11, 0, '2025-10-31 20:34:03', 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 --
 -- Triggers `tb_device_status`
@@ -195,8 +195,12 @@ CREATE TABLE `tb_history` (
 --
 
 INSERT INTO `tb_history` (`id`, `device_id`, `message`, `created_at`) VALUES
-(46, 5, 'Perangkat Aktif!', '2025-10-30 15:27:55'),
-(47, 5, 'Perangkat Mati!', '2025-10-30 15:28:58');
+(83, 6, 'Perangkat Mati!', '2025-10-31 20:12:33'),
+(86, 6, 'Perangkat Aktif!', '2025-10-31 20:21:17'),
+(89, 6, 'Perangkat Mati!', '2025-10-31 20:25:38'),
+(111, 5, 'Perangkat Mati!', '2025-11-03 15:51:55'),
+(112, 5, 'Kapasitas organik mencapai 95%', '2025-11-03 15:53:24'),
+(113, 5, 'Kapasitas logam mencapai 88%', '2025-11-03 15:53:24');
 
 -- --------------------------------------------------------
 
@@ -257,7 +261,40 @@ INSERT INTO `tb_sorting_history` (`id`, `device_id`, `jenis_sampah`, `jumlah`, `
 (146, 5, 'anorganik', 27, '2025-06-30 08:29:07'),
 (147, 5, 'anorganik', 30, '2025-07-30 08:29:07'),
 (148, 5, 'anorganik', 18, '2025-08-30 08:29:07'),
-(149, 5, 'anorganik', 60, '2025-09-30 08:29:07');
+(149, 5, 'anorganik', 60, '2025-09-30 08:29:07'),
+(150, 5, 'organik', 1, '2025-10-31 18:08:04'),
+(151, 5, 'organik', 1, '2025-10-31 18:08:13'),
+(152, 5, 'anorganik', 1, '2025-10-31 18:08:26'),
+(153, 5, 'anorganik', 1, '2025-10-31 18:08:40'),
+(154, 5, 'organik', 1, '2025-10-31 18:08:50'),
+(155, 5, 'logam', 1, '2025-10-31 18:08:59'),
+(156, 5, 'organik', 1, '2025-11-03 15:51:58'),
+(157, 5, 'organik', 1, '2025-11-03 15:52:21'),
+(158, 5, 'organik', 1, '2025-11-03 15:52:22'),
+(159, 5, 'organik', 1, '2025-11-03 15:52:23'),
+(160, 5, 'organik', 1, '2025-11-03 15:52:23'),
+(161, 5, 'organik', 1, '2025-11-03 15:52:24'),
+(162, 5, 'organik', 1, '2025-11-03 15:52:24'),
+(163, 5, 'organik', 1, '2025-11-03 15:52:24'),
+(164, 5, 'organik', 1, '2025-11-03 15:52:25'),
+(165, 5, 'anorganik', 1, '2025-11-03 15:52:29'),
+(166, 5, 'anorganik', 1, '2025-11-03 15:52:29'),
+(167, 5, 'anorganik', 1, '2025-11-03 15:52:30'),
+(168, 5, 'anorganik', 1, '2025-11-03 15:52:30'),
+(169, 5, 'anorganik', 1, '2025-11-03 15:52:31'),
+(170, 5, 'anorganik', 1, '2025-11-03 15:52:31'),
+(171, 5, 'anorganik', 1, '2025-11-03 15:52:31'),
+(172, 5, 'anorganik', 1, '2025-11-03 15:52:32'),
+(173, 5, 'anorganik', 1, '2025-11-03 15:52:32'),
+(174, 5, 'anorganik', 1, '2025-11-03 15:52:33'),
+(175, 5, 'anorganik', 1, '2025-11-03 15:52:33'),
+(176, 5, 'logam', 1, '2025-11-03 15:52:37'),
+(177, 5, 'logam', 1, '2025-11-03 15:52:38'),
+(178, 5, 'logam', 1, '2025-11-03 15:52:38'),
+(179, 5, 'logam', 1, '2025-11-03 15:52:39'),
+(180, 5, 'logam', 1, '2025-11-03 15:52:39'),
+(181, 5, 'logam', 1, '2025-11-03 15:52:40'),
+(182, 5, 'logam', 1, '2025-11-03 15:52:42');
 
 -- --------------------------------------------------------
 
@@ -326,25 +363,25 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT for table `tb_device`
 --
 ALTER TABLE `tb_device`
-  MODIFY `device_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `device_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `tb_device_status`
 --
 ALTER TABLE `tb_device_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tb_history`
 --
 ALTER TABLE `tb_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `tb_sorting_history`
 --
 ALTER TABLE `tb_sorting_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
 
 --
 -- AUTO_INCREMENT for table `tb_user`
