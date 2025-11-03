@@ -110,7 +110,7 @@
             <!-- Search Input -->
             <div class="w-full md:w-72 py-2 flex items-center bg-slate-800 border border-emerald-500/20 rounded-lg shadow-lg overflow-hidden px-3 gap-2 hover:border-emerald-500/40 transition-all duration-200">
                 <i class="fa-solid fa-search text-emerald-400 text-xl"></i>
-                <input type="text" placeholder="Cari device..." class="w-full h-full bg-transparent text-slate-200 placeholder:text-slate-500 outline-none">
+                <input type="text" placeholder="Cari device..." class="search-input w-full h-full bg-transparent text-slate-200 placeholder:text-slate-500 outline-none">
             </div>
         </div>
         <!-- KONTEN 1 END -->
@@ -120,8 +120,8 @@
             <?php
                 while($result = mysqli_fetch_assoc($sql)){
             ?>
-            <!-- ITEM 2 (Offline Example) -->
-            <div class="grid-item bg-slate-800 border border-emerald-500/20 rounded-xl p-4 hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 transition-all duration-200 shadow-lg hover:border-emerald-500/40 group">
+            <!-- ITEM 2 -->
+            <div class="data-item grid-item bg-slate-800 border border-emerald-500/20 rounded-xl p-4 hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 transition-all duration-200 shadow-lg hover:border-emerald-500/40 group">
                <form action="../proses.php" method="POST" class="flex justify-center">
                   <input type="hidden" value="<?php echo $result['device_id']; ?>" name="device_id">
                   <button type="submit" name="aksi" value="device" class="block w-full">
@@ -130,13 +130,13 @@
                        </div>
                        <h1 class="text-center font-bold text-xl mb-2 text-slate-200"><?php echo $result['device_name'] ?></h1>
                        <?php if($result['status'] == 1){ ?>
-                       <p class="text-center bg-emerald-500/20 text-emerald-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-emerald-500/30">
+                       <p id="tag_status_<?php echo $result['device_id']; ?>" data-device="<?php echo $result['device_id'];?>" class="text-center bg-emerald-500/20 text-emerald-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-emerald-500/30">
                            <i class="fa-solid fa-circle text-xs animate-pulse"></i> Online
                        </p>
                        <?php 
                        } else { 
                        ?>
-                       <p class="text-center bg-slate-700/50 text-slate-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-slate-600">
+                       <p id="tag_status_<?php echo $result['device_id']; ?>" data-device="<?php echo $result['device_id'];?>" class="text-center bg-slate-700/50 text-slate-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-slate-600">
                            <i class="fa-solid fa-circle text-xs"></i> Offline
                        </p>
                        <?php
@@ -168,6 +168,8 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<script src="../js/jquery.js"></script>
+<script src="../js/search.js"></script>
 <script>
    function checkDeviceStatus() {
       fetch('../check_device_status.php')
@@ -192,6 +194,31 @@
    // Jalankan setiap 30 detik
    setInterval(checkDeviceStatus, 30000);
 </script>
+<!-- auto update status online/offline jika ada perubahan pada database rek -->
+<script>
+   $(document).ready(() =>{
+      setInterval(() =>{
+      $.getJSON('../show_data.php?type=status_device', function(list) {
+      $.each(list, function(index, item) {
+         let id = item.device;
+         let status = parseInt(item.status);
+         let $tag = $('#tag_status_' + id);
 
+         if ($tag.length) {
+               if (status === 1) {
+                  $tag
+                     .attr('class', 'text-center bg-emerald-500/20 text-emerald-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-emerald-500/30')
+                     .html('<i class="fa-solid fa-circle text-xs animate-pulse"></i> Online');
+               } else {
+                  $tag
+                     .attr('class', 'text-center bg-slate-700/50 text-slate-400 py-1.5 px-3 font-medium rounded-full mb-3 text-sm border border-slate-600')
+                     .html('<i class="fa-solid fa-circle text-xs"></i> Offline');
+                  }
+               }
+            });
+         });
+      }, 1000)
+   })
+</script>
 </body>
 </html>

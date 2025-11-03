@@ -170,7 +170,7 @@ if (!empty($_SESSION['device_id'])) {
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Total Perangkat</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $total_perangkat; ?></h1>
+                   <h1 id="total_perangkat" class="text-3xl font-medium text-emerald-400"><?php echo $total_perangkat; ?></h1>
                 </div>
             </div>
           
@@ -181,7 +181,7 @@ if (!empty($_SESSION['device_id'])) {
                </div>
                 <div class="text-slate-200">
                    <h2 class="text-sm md:text-base text-slate-400">Status Sistem</h2>
-                   <h1 class="text-lg font-medium text-emerald-400"><?php echo $total_online; ?>/<?php echo $total_perangkat; ?> Online</h1>
+                   <h1 id="total_online" class="text-lg font-medium text-emerald-400"><?php echo $total_online; ?>/<?php echo $total_perangkat; ?> Online</h1>
                 </div>
             </div>
             
@@ -192,7 +192,7 @@ if (!empty($_SESSION['device_id'])) {
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Total Pemilahan</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $total_pemilahan; ?></h1>
+                   <h1 id="total_pemilahan" class="text-3xl font-medium text-emerald-400"><?php echo $total_pemilahan; ?></h1>
                 </div>
             </div>
             
@@ -203,7 +203,7 @@ if (!empty($_SESSION['device_id'])) {
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Perlu Dikosongkan</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $perlu_dikosongkan; ?></h1>
+                   <h1 id="perlu_dikosongkan" class="text-3xl font-medium text-emerald-400"><?php echo $perlu_dikosongkan; ?></h1>
                 </div>
             </div>
          </div>
@@ -258,7 +258,7 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill" id="rotasi_organik"></div>
+                        <div class="gauge__fill" id="rotasi_kapasitas_organik"></div>
                         <div class="gauge__cover text-white" id="kapasitas_organik"></div>
                      </div>
                   </div>
@@ -276,7 +276,7 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill" id="rotasi_anorganik"></div>
+                        <div class="gauge__fill rotasi_kapasitas_anorganik" id="rotasi_kapasitas_anorganik"></div>
                         <div class="gauge__cover text-white" id="kapasitas_anorganik"></div>
                      </div>
                   </div>
@@ -293,7 +293,7 @@ if (!empty($_SESSION['device_id'])) {
                <div class="card text-center">
                   <div class="gauge">
                      <div class="gauge__body">
-                        <div class="gauge__fill" id="rotasi_logam"></div>
+                        <div class="gauge__fill" id="rotasi_kapasitas_logam"></div>
                         <div class="gauge__cover text-white" id="kapasitas_logam"></div>
                      </div>
                   </div>
@@ -450,51 +450,37 @@ if (!empty($_SESSION['device_id'])) {
       });
 </script>
 <script>
-   function checkDeviceStatus() {
-      fetch('../check_device_status.php')
-         .then(response => response.json())
-         .then(data => {
-               console.log('Device Status Check:', data);
-               
-               // Jika ada device yang berubah jadi offline, reload page
-               if (data.status === 'success' && data.message.includes('set to offline')) {
-                  console.log('⚠️ Device status changed! Reloading...');
-                  location.reload();
-               }
-         })
-         .catch(error => {
-               console.error('Status check error:', error);
-         });
-   }
-
-   // Jalankan pertama kali saat page load
-   checkDeviceStatus();
-
-   // Jalankan setiap 30 detik
-   setInterval(checkDeviceStatus, 30000);
-</script>
-<script>
    $(document).ready(function(){
+       // pastikan response tidak di-cache
+       $.ajaxSetup({ cache: false });
       setInterval(() => {
          // LOAD DATA ORGANIK
          $('#kapasitas_organik').load('show_data.php?type=kapasitas_organik');
          $.get('show_data.php?type=rotasi_organik').done(function(datanya){
             let turns = datanya;
-            $('#rotasi_organik').css('transform', `rotate(${turns}turn)`);
+            $('#rotasi_kapasitas_organik').css('transform', `rotate(${turns}turn)`);
          });
          // LOAD DATA ANORGANIK
          $('#kapasitas_anorganik').load('show_data.php?type=kapasitas_anorganik');
          $.get('show_data.php?type=rotasi_anorganik').done(function(datanya){
             let turns = datanya;
-            $('#rotasi_anorganik').css('transform', `rotate(${turns}turn)`);
+            $('#rotasi_kapasitas_anorganik').css('transform', `rotate(${turns}turn)`);
          })
          // LOAD DATA LOGAM
          $('#kapasitas_logam').load('show_data.php?type=kapasitas_logam');
          $.get('show_data.php?type=rotasi_logam').done(function(datanya){
             let turns = datanya;
-            $('#rotasi_logam').css('transform', `rotate(${turns}turn)`);
+            $('#rotasi_kapasitas_logam').css('transform', `rotate(${turns}turn)`);
          });
-      }, 2000);
+         // LOAD TOTAL PERANGKAT
+         $('#total_perangkat').load('show_data.php?type=total_perangkat');
+         // LOAD TOTAL PERANGKAT YANG ONLINE
+         $('#total_online').load('show_data.php?type=total_online');
+         // LOAD TOTAL PEMILAHAN
+         $('#total_pemilahan').load('show_data.php?type=total_pemilahan');
+         // LOAD PERLU DIKOSONGKAN
+         $('#perlu_dikosongkan').load('show_data.php?type=perlu_dikosongkan');
+      }, 1000);
    })
 </script>
 </body>

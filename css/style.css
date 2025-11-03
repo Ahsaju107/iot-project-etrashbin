@@ -44,16 +44,16 @@
 		}
 
 		.gauge__fill {
-		  position: absolute;
-		  top: 100%;
-		  left: 0;
-		  width: inherit;
-		  height: 100%;
-		  background: linear-gradient(180deg, #117959 0%, #22f5ea 100%);
-		  transform-origin: center top;
-		  transform: rotate(0.25turn);
-		  transition: transform 0.2s ease-out;
-		}
+			position: absolute;
+			top: 0; 
+			left: 0;
+			width: inherit;
+			height: 100%;
+			background: linear-gradient(180deg, #117959 0%, #22f5ea 100%);
+			transform-origin: center bottom; 
+			transform: rotate(0.25turn); 
+			transition: transform 0.2s ease-out;
+		}		
 
 		.gauge__cover {
 		  width: 75%;	

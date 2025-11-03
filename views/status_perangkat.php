@@ -60,7 +60,7 @@
     $result = mysqli_fetch_assoc($sql);
 
     // QUERY HISTORY
-    $query_history = "SELECT * FROM tb_history WHERE device_id = '{$_SESSION['device_id']}' LIMIT 10";
+    $query_history = "SELECT * FROM tb_history WHERE device_id = '{$_SESSION['device_id']}' ORDER BY id DESC LIMIT 10";
     $sql_history = mysqli_query($conn,$query_history);
 
     // Fungsi format waktu relatif
@@ -187,7 +187,7 @@
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Total Perangkat</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $totalPerangkat['total_perangkat'];?></h1>
+                   <h1 id="total_perangkat" class="text-3xl font-medium text-emerald-400"><?php echo $totalPerangkat['total_perangkat'];?></h1>
                 </div>
             </div>
           
@@ -198,7 +198,7 @@
                </div>
                 <div class="text-slate-200">
                    <h2 class="text-sm md:text-base text-slate-400">Status Sistem</h2>
-                   <h1 class="text-xl font-medium text-emerald-400"><?php echo $perangkatOnline['perangkat_online'];?>/<?php echo $totalPerangkat['total_perangkat'];?> Online</h1>
+                   <h1 id="total_online" class="text-xl font-medium text-emerald-400"><?php echo $perangkatOnline['perangkat_online'];?>/<?php echo $totalPerangkat['total_perangkat'];?> Online</h1>
                 </div>
             </div>
             <!-- card 3 -->
@@ -208,7 +208,7 @@
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Total Pemilahan</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $total_pemilahan;?></h1>
+                   <h1 id="total_pemilahan" class="text-3xl font-medium text-emerald-400"><?php echo $total_pemilahan;?></h1>
                 </div>
             </div>
             <!-- card 4 -->
@@ -218,7 +218,7 @@
                </div>
                 <div class="text-slate-200 text-end">
                    <h2 class="text-sm md:text-base text-slate-400">Perlu Dikosongkan</h2>
-                   <h1 class="text-3xl font-medium text-emerald-400"><?php echo $perlu_dikosongkan;?></h1>
+                   <h1 id="perlu_dikosongkan" class="text-3xl font-medium text-emerald-400"><?php echo $perlu_dikosongkan;?></h1>
                 </div>
             </div>
          </div>
@@ -511,36 +511,10 @@
           <div class="w-full p-4 rounded-xl bg-slate-800 text-white shadow-xl">
             <div class="flex justify-between w-full">
                 <h1 class="text-2xl font-bold mb-4 text-slate-200">History</h1>
-                <form action="../proses.php" method="post">
-                    <a href="../proses.php?hapus_history" class="del-btn text-red-500 hover:underline hover:text-red-600 rounded-md mr-2">Hapus semua</a>
-                </form>
+                <a href="../proses.php?hapus_history=<?php echo $_SESSION['device_id']; ?>" class="del-btn text-red-500 hover:underline hover:text-red-600 rounded-md mr-2">Hapus semua</a>
             </div>
-            <div class="flex flex-wrap gap-3">
-            <?php
-                if(mysqli_num_rows($sql_history) > 0){
-            ?>
-                <?php 
-                    while($history = mysqli_fetch_assoc($sql_history)){
-                ?>
-                        <!-- ITEM 1 -->
-                    <div class="w-full flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg shadow-lg hover:ring-2 hover:ring-emerald-500/50 hover:-translate-y-1 hover:bg-slate-700 duration-200 transition-all">
-                        <i class="fa-solid fa-circle-info text-emerald-400 text-xl"></i>
-                        <div>
-                            <h2 class="font-medium text-emerald-400 text-base"><?php echo $history['message']; ?></h2>
-                            <p class="text-slate-400 text-sm"><?php echo $history['created_at']; ?></p>   
-                        </div>
-                    </div>
-                <?php } ?>
-            
-            <?php
-             } else {
-            ?>
-                <div class="w-full p-1 text-slate-500/70 flex justify-center">
-                    <h1>Tidak ada history</h1>
-                </div>
-            <?php 
-             }
-            ?>
+            <div id="list_history">
+          
             
             
           </div>
@@ -552,6 +526,7 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<script src="../js/jquery.js"></script>
 <script>
    function checkDeviceStatus() {
       fetch('../check_device_status.php')
@@ -576,6 +551,21 @@
    // Jalankan setiap 30 detik
    setInterval(checkDeviceStatus, 30000);
 </script>
-
+<script>
+    $(document).ready(()=>{
+        setInterval(()=>{
+            // LOAD TOTAL PERANGKAT
+            $('#total_perangkat').load('../show_data.php?type=total_perangkat');
+            // LOAD TOTAL PERANGKAT YANG ONLINE
+            $('#total_online').load('../show_data.php?type=total_online');
+            // LOAD TOTAL PEMILAHAN 
+            $('#total_pemilahan').load('../show_data.php?type=total_pemilahan');
+            // LOAD PERLU DIKOSONGKAN
+            $('#perlu_dikosongkan').load('../show_data.php?type=perlu_dikosongkan');
+            // LOAD HISTORY
+           $('#list_history').load('../show_data.php?history');
+        }, 3000)
+    })
+</script>
 </body>
 </html>

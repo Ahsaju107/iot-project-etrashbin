@@ -121,7 +121,8 @@
 
     // FUNGSI HAPUS HISTORY
     if(isset($_GET['hapus_history'])){
-        $query = "DELETE FROM tb_history";
+        $device_id = $_GET['hapus_history'];
+        $query = "DELETE FROM tb_history WHERE device_id = $device_id";
         $sql = mysqli_query($conn,$query);
         if($sql){
             header('location: ./views/status_perangkat.php');
