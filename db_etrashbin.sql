@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 03, 2025 at 01:13 PM
+-- Generation Time: Nov 07, 2025 at 01:19 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -110,7 +110,7 @@ CREATE TABLE `tb_device_status` (
 --
 
 INSERT INTO `tb_device_status` (`id`, `device_id`, `wifi_signal`, `last_update`, `sensor_cam`, `sensor_ultrasonic`, `sensor_proximity`, `servo`, `lcd`, `kapasitas_organik`, `kapasitas_anorganik`, `kapasitas_logam`, `sorting_today`) VALUES
-(7, 5, 0, '2025-11-03 15:52:42', 0, 0, 0, 0, 0, 95, 76, 88, 65),
+(7, 5, 0, '2025-11-03 21:21:00', 0, 0, 0, 0, 0, 54, 91, 76, 65),
 (8, 6, 30, '2025-10-31 20:21:17', 0, 0, 0, 0, 0, 52, 44, 10, 0),
 (9, 7, 30, '2025-10-31 21:51:42', 0, 0, 0, 0, 0, 94, 77, 86, 78),
 (13, 11, 0, '2025-10-31 20:34:03', 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -198,9 +198,7 @@ INSERT INTO `tb_history` (`id`, `device_id`, `message`, `created_at`) VALUES
 (83, 6, 'Perangkat Mati!', '2025-10-31 20:12:33'),
 (86, 6, 'Perangkat Aktif!', '2025-10-31 20:21:17'),
 (89, 6, 'Perangkat Mati!', '2025-10-31 20:25:38'),
-(111, 5, 'Perangkat Mati!', '2025-11-03 15:51:55'),
-(112, 5, 'Kapasitas organik mencapai 95%', '2025-11-03 15:53:24'),
-(113, 5, 'Kapasitas logam mencapai 88%', '2025-11-03 15:53:24');
+(129, 5, 'Kapasitas anorganik mencapai 91%', '2025-11-04 19:48:51');
 
 -- --------------------------------------------------------
 
@@ -375,7 +373,7 @@ ALTER TABLE `tb_device_status`
 -- AUTO_INCREMENT for table `tb_history`
 --
 ALTER TABLE `tb_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `tb_sorting_history`

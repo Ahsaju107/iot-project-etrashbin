@@ -197,6 +197,7 @@
 <!-- auto update status online/offline jika ada perubahan pada database rek -->
 <script>
    $(document).ready(() =>{
+      $.ajaxSetup({ cache: false });
       setInterval(() =>{
       $.getJSON('../show_data.php?type=status_device', function(list) {
       $.each(list, function(index, item) {

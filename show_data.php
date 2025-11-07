@@ -171,13 +171,10 @@ if (!empty($_SESSION['device_id'])) {
                     'status' => $result['status']
                 ];
             }
-
             header('Content-Type: application/json');
             echo json_encode($data);
             exit();
         } 
-    
-       
     }
 
 ?>
@@ -218,4 +215,290 @@ if (!empty($_SESSION['device_id'])) {
             
           </div>
     </body>
-<?php } ?>
+    
+<?php 
+   } elseif(isset($_GET['status_sensor'])){
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <script src="https://cdn.tailwindcss.com"></script>
+     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+</head>
+<body>
+      <!-- KONTEN 3 -->
+          <div class="flex flex-wrap gap-3 mb-8">
+            <!-- SUB 1 KONTEN 3 -->
+            <div class="w-full md:w-[70%] bg-slate-800 rounded-xl text-white p-4 shadow-xl">
+                <h1 class="text-2xl mb-4 font-bold text-slate-200">Status Sensor</h1>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <!-- Status ESP32-CAM -->
+                     <!-- JIKA AKTIF HIJAU -->
+                     <?php
+                        if($resultData['sensor_cam'] == 1){
+                     ?>
+                     <div id="sensor_cam" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-emerald-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-camera text-emerald-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-emerald-400">ESP32-CAM</h2>
+                                <p class="text-slate-400 text-sm">Kamera & AI: Aktif</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-emerald-500 z-10 right-2 top-2 shadow-lg shadow-emerald-500/50"></div>
+                     </div>
+                     <!-- JIKA OFFLINE MERAH -->
+                     <?php
+                      } else {
+                     ?>
+                     <div id="sensor_cam" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-red-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-camera text-red-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-red-400">ESP32-CAM</h2>
+                                <p class="text-slate-400 text-sm">Kamera & AI: Error</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-red-500 z-10 right-2 top-2 shadow-lg shadow-red-500/50"></div>
+                     </div>
+                     <?php
+                      } 
+                     ?>
+                    
+                    <!-- Status Sensor Ultrasonik -->
+                      <!-- JIKA AKTIF HIJAU -->
+                     <?php 
+                        if($resultData['sensor_ultrasonic'] == 1){
+                     ?>
+                    <div id="sensor_ultrasonic" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-emerald-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <img src="../images/ultrasonic-icon.svg" alt="ultrasonic-icon" class="w-7">
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-emerald-400">Sensor Ultrasonik</h2>
+                                <p class="text-slate-400 text-sm">4 Sensor: Normal</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-emerald-500 z-10 right-2 top-2 shadow-lg shadow-emerald-500/50"></div>
+                     </div>
+                     <?php 
+                        } else {
+                     ?>
+                    <div id="sensor_ultrasonic" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-red-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <img src="../images/ultrasonic-icon.svg" alt="ultrasonic-icon" class="w-7 red-svg" style="filter: invert(60%) sepia(94%) saturate(4288%) hue-rotate(340deg) brightness(97%) contrast(97%);">
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-red-400">Sensor Ultrasonik</h2>
+                                <p class="text-slate-400 text-sm">4 Sensor: Error</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-red-500 z-10 right-2 top-2 shadow-lg shadow-red-500/50"></div>
+                     </div>
+                     <?php
+                      } 
+                     ?>
+                     
+                    <!-- Status Proximity Induktif -->
+                     <!-- JIKA AKTIF HIJAU -->
+                     <?php 
+                        if($resultData['sensor_proximity'] == 1){
+                     ?>
+                    <div id="sensor_proximity" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-emerald-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <img src="../images/proximity-induktif.svg" alt="proximity-induktif" class="w-8">
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-emerald-400">Proximity Induktif</h2>
+                                <p class="text-slate-400 text-sm">Deteksi: Standby</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-emerald-500 z-10 right-2 top-2 shadow-lg shadow-emerald-500/50"></div>
+                     </div>
+                     <?php 
+                        } else {
+                     ?>
+                    <div id="sensor_proximity" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-red-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <img src="../images/proximity-induktif.svg" alt="proximity-induktif" class="w-8" style="filter: invert(60%) sepia(94%) saturate(4288%) hue-rotate(340deg) brightness(97%) contrast(97%);">
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-red-400">Proximity Induktif</h2>
+                                <p class="text-slate-400 text-sm">Deteksi: Error</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-red-500 z-10 right-2 top-2 shadow-lg shadow-red-500/50"></div>
+                     </div>
+                     <?php
+                      } 
+                     ?>
+                     
+                    <!-- Status Servo Motor -->
+                     <!-- JIKA AKTIF HIJAU -->
+                     <?php 
+                        if($resultData['servo'] == 1){
+                     ?>
+                    <div id="servo" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-emerald-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <img src="../images/servo.svg" alt="servo" class="w-7">
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-emerald-400">Servo Motor</h2>
+                                <p class="text-slate-400 text-sm">Dual-Axis: Normal</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-emerald-500 z-10 right-2 top-2 shadow-lg shadow-emerald-500/50"></div>
+                     </div>
+                     <?php 
+                        } else {
+                     ?>
+                    <div id="servo" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-red-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-red-500/20 rounded-lg flex items-center justify-center" style="filter: invert(60%) sepia(94%) saturate(4288%) hue-rotate(340deg) brightness(97%) contrast(97%);">
+                                <img src="../images/servo.svg" alt="servo" class="w-7">
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-red-400">Servo Motor</h2>
+                                <p class="text-slate-400 text-sm">Dual-Axis: Error</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-red-500 z-10 right-2 top-2 shadow-lg shadow-red-500/50"></div>
+                     </div>
+                     <?php
+                      } 
+                     ?>
+                     
+                    <!-- Status LCD Display -->
+                     <!-- JIKA AKTIF HIJAU -->
+                     <?php 
+                        if($resultData['lcd'] == 1){
+                     ?>
+                    <div id="lcd" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-emerald-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <img src="../images/lcd-display.svg" alt="lcd-display" class="w-7">
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-emerald-400">LCD Display</h2>
+                                <p class="text-slate-400 text-sm">Tampilan: Aktif</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-emerald-500 z-10 right-2 top-2 shadow-lg shadow-emerald-500/50"></div>
+                     </div>
+                     <?php 
+                        } else {
+                     ?>
+                    <div id="lcd" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-red-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <img src="../images/lcd-display.svg" alt="lcd-display" class="w-7" style="filter: invert(60%) sepia(94%) saturate(4288%) hue-rotate(340deg) brightness(97%) contrast(97%);">
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-red-400">LCD Display</h2>
+                                <p class="text-slate-400 text-sm">Tampilan: Error</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-red-500 z-10 right-2 top-2 shadow-lg shadow-red-500/50"></div>
+                     </div>
+                     <?php
+                      } 
+                     ?>
+                     
+                    <!-- Status Power Supply -->
+                     <!-- JIKA AKTIF HIJAU -->
+                     <?php 
+                        if($resultData['status'] == 1){
+                     ?>
+                    <div id="psu" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-emerald-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-plug text-emerald-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-emerald-400">Power Supply</h2>
+                                <p class="text-slate-400 text-sm">5V 3V: Normal</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-emerald-500 z-10 right-2 top-2 shadow-lg shadow-emerald-500/50"></div>
+                     </div>
+                     <?php 
+                        } else {
+                     ?>
+                    <div id="psu" class="bg-slate-700/50 rounded-lg p-4 flex justify-between shadow-lg relative hover:ring-2 hover:ring-red-500/50 hover:bg-slate-700 transition-all duration-200">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="w-9 h-9 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-plug text-red-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-semibold text-base text-red-400">Power Supply</h2>
+                                <p class="text-slate-400 text-sm">5V 3V: Mati</p>
+                            </div>
+                        </div>
+                        <div class="absolute w-2 h-2 rounded-full bg-red-500 z-10 right-2 top-2 shadow-lg shadow-red-500/50"></div>
+                     </div>
+                     <?php
+                      } 
+                     ?>
+                     
+
+                </div>
+            </div>
+            <!-- SUB 1 KONTEN 3 END -->
+
+            <!-- SUB 2 KONTEN 3 -->
+            <div class="bg-slate-800 w-full md:w-[27%] rounded-xl text-white shadow-xl p-4 gap-3 grid grid-cols-2 md:grid-cols-1">
+                <!-- Item status perangkat -->
+                 <!-- JIKA AKTIF HIJAU -->
+                     <?php 
+                        if($resultData['status'] == 1){
+                     ?>
+                        <div id="status" class="flex flex-col bg-slate-700/50 w-full items-center hover:ring-2 hover:ring-emerald-500/50 rounded-lg p-4 mx-auto shadow-lg hover:bg-slate-700 transition-all duration-200">
+                            <div class="w-10 h-10 rounded-full bg-emerald-500 mb-2 animate-pulse shadow-lg shadow-emerald-500/50"></div>
+                            <h2 class="font-semibold text-xl text-slate-200">Online</h2>
+                            <p class="text-slate-400">Status</p>
+                        </div>
+                     <?php 
+                        } else {
+                     ?>
+                        <div id="status" class="flex flex-col bg-slate-700/50 w-full items-center hover:ring-2 hover:ring-red-500/50 rounded-lg p-4 mx-auto shadow-lg hover:bg-slate-700 transition-all duration-200">
+                            <div class="w-10 h-10 rounded-full bg-red-500 mb-2 animate-pulse shadow-lg shadow-red-500/50"></div>
+                            <h2 class="font-semibold text-xl text-slate-200">Offline</h2>
+                            <p class="text-slate-400">Status</p>
+                        </div>
+                     <?php
+                      } 
+                     ?>
+                
+                <!-- Item status Sinyal Wifi -->
+                <div id="wifi_signal" class="flex flex-col bg-slate-700/50 w-full items-center hover:ring-2 hover:ring-emerald-500/50 rounded-lg p-4 mx-auto shadow-lg hover:bg-slate-700 transition-all duration-200">
+                    <i class="fa-solid fa-wifi text-3xl text-emerald-400 mb-2"></i>
+                    <h2 class="font-semibold text-xl text-slate-200">-<?php echo $resultData['wifi_signal'] ?> dBm</h2>
+                    <p class="text-slate-400">Sinyal Wifi</p>
+                </div>
+                <!-- Item status Update Terakhir kali -->
+                <div id="last_update" class="flex flex-col bg-slate-700/50 w-full items-center rounded-lg text-center hover:ring-2 hover:ring-emerald-500/50 p-4 mx-auto shadow-lg hover:bg-slate-700 transition-all duration-200">
+                    <i class="fa-solid fa-clock text-3xl text-emerald-400 mb-2"></i>
+                    <h2 class="font-semibold text-xl text-slate-200"><?php echo timeAgo($resultData['last_update']); ?></h2>
+                    <p class="text-slate-400">Update Terakhir</p>
+                </div>
+
+            </div>
+            <!-- SUB 2 KONTEN 3 END -->
+          </div>
+          <!-- KONTEN 3 END -->
+
+</body>
+</html>
+<?php }; exit(); ?>
