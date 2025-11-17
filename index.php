@@ -94,8 +94,8 @@ if (!empty($_SESSION['device_id'])) {
 </head>
 <body class="bg-slate-900">
    <nav class="bg-slate-800/95 backdrop-blur-sm flex sm:hidden p-3 justify-between items-center text-white w-full z-20 fixed border-b border-emerald-500/20">
-      <h1 class="font-extrabold text-xl judul-dashboard text-emerald-400"><i>E-TrashBin</i></h1>
-      <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button">
+      <img src="./images/logo_etrashbin_mobile.png" alt="logo logo_etrashbin" class="w-32">   
+   <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button">
          <i class="fa-solid fa-bars-staggered text-lg text-emerald-400"></i>
       </button>
    </nav>
@@ -103,7 +103,7 @@ if (!empty($_SESSION['device_id'])) {
 
 <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
    <div class="h-full px-3 py-4 overflow-y-auto bg-slate-800 border-r border-emerald-500/20">
-      <h1 class="font-extrabold text-2xl text-emerald-400 mb-4 judul-dashboard text-center italic">E-TrashBin</h1>
+      <img src="./images/logo_etrashbin.png" alt="logo logo_etrashbin" class="mx-auto mb-2">
    <ul class="font-medium space-y-2">
          <!-- Dashboard -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
@@ -136,13 +136,7 @@ if (!empty($_SESSION['device_id'])) {
                <span class="ms-3">Pengaturan</span>
             </a>
          </li>
-         <!-- About -->
-         <li class="hover:-translate-y-1 duration-100 transition-all">
-            <a href="#" class="nav-link flex items-center p-2 rounded-lg text-slate-300 hover:bg-emerald-500/10 hover:text-emerald-400 group">
-               <i class="fa-solid fa-circle-info"></i>
-               <span class="ms-3">Tentang</span>
-            </a>
-         </li>
+         
          <!-- Logout -->
          <li class="hover:-translate-y-1 duration-100 transition-all">
             <form action="./proses.php" method="post">

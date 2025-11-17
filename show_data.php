@@ -484,7 +484,7 @@ if (!empty($_SESSION['device_id'])) {
                 <!-- Item status Sinyal Wifi -->
                 <div id="wifi_signal" class="flex flex-col bg-slate-700/50 w-full items-center hover:ring-2 hover:ring-emerald-500/50 rounded-lg p-4 mx-auto shadow-lg hover:bg-slate-700 transition-all duration-200">
                     <i class="fa-solid fa-wifi text-3xl text-emerald-400 mb-2"></i>
-                    <h2 class="font-semibold text-xl text-slate-200">-<?php echo $resultData['wifi_signal'] ?> dBm</h2>
+                    <h2 class="font-semibold text-xl text-slate-200"><?php echo $resultData['wifi_signal'] ?> dBm</h2>
                     <p class="text-slate-400">Sinyal Wifi</p>
                 </div>
                 <!-- Item status Update Terakhir kali -->

@@ -11,8 +11,8 @@
 </head>
 <body class="bg-slate-900 text-white">
     <main class="flex items-center justify-center px-3 w-full min-h-screen">
-        <section class="text-center w-[400px] h-[600px] p-6 bg-slate-800 rounded-lg shadow-md drop-shadow-[0_3px_3px_rgb(16,185,128,0.3)] hover:drop-shadow-[0_3px_3px_rgb(16,185,128)] border border-emerald-500/50">
-            <img src="../images/logo.png" alt="logo-iot" class="w-32 mx-auto mb-24 mt-5">
+        <section class="text-center w-[400px] h-[500px] lg:h-[550px] p-6 bg-slate-800 rounded-lg shadow-md drop-shadow-[0_3px_3px_rgb(16,185,128,0.3)] hover:drop-shadow-[0_3px_3px_rgb(16,185,128)] border border-emerald-500/50">
+            <img src="../images/logo_etrashbin.png" alt="logo-iot" class="w-full mx-auto mb-16 mt-5">
             <form action="../proses.php" method="POST" class="w-full">
                 <!-- INPUT USERNAME -->
                 <div class="flex flex-wrap mb-5">
